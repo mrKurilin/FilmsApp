@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">FilmsApp</string>
+    <string name="email">Электронная почта</string>
+    <string name="password">Пароль</string>
+    <string name="sign_in">Войти</string>
+    <string name="or">или</string>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="no_network">Нет интернет соединения</string>
+    <string name="retry">Попробовать снова</string>
+    <string name="not_registered_yet">Ещё не зарегистрированы?</string>
+</resources>
