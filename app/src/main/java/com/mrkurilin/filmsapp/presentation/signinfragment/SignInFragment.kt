@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuthException
 import com.mrkurilin.filmsapp.R
 import com.mrkurilin.filmsapp.data.ViewModelFactory
@@ -44,7 +45,8 @@ class SignInFragment : Fragment() {
         }
 
         binding.signUpTextView.setOnClickListener {
-            // TODO: Navigate to signup
+            val action = SignInFragmentDirections.actionSignInFragmentToSignUpFragment()
+            findNavController().navigate(action)
         }
 
         lifecycleScope.launch {
@@ -66,7 +68,8 @@ class SignInFragment : Fragment() {
                 binding.signInGroup.visibility = View.VISIBLE
             }
             SignInUIState.SignedIn -> {
-                TODO("navigate to main fragment")
+                val action = SignInFragmentDirections.actionSignInFragmentToMainFragment()
+                findNavController().navigate(action)
             }
             SignInUIState.Loading -> {
                 binding.progressBar.visibility = View.VISIBLE
