@@ -7,5 +7,12 @@
     <string name="sign_up">Зарегистрироваться</string>
     <string name="no_network">Нет интернет соединения</string>
     <string name="retry">Попробовать снова</string>
-    <string name="not_registered_yet">Ещё не зарегистрированы?</string>
+    <string name="not_registered_yet_question">Ещё не зарегистрированы?</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
+    <string name="bad_formatted_email">Неверный формат электронной почты</string>
+    <string name="wrong_email_or_password">Неверное имя пользователя или пароль</string>
+    <string name="authentication_error">Ошибка авторизации</string>
+    <string name="field_should_not_be_empty">Поле не должно быть пустым</string>
+    <string name="invalid_email">Неверный формат электронной почты</string>
+    <string name="invalid_password">Неверный формат пароля</string>
 </resources>
