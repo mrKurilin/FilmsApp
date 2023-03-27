@@ -56,18 +56,21 @@ class SignUpFragmentTest {
         signUpButton.perform(click())
         emailEditText.check(matches(hasErrorText(emptyFieldError)))
         passwordEditText.check(matches(hasErrorText(emptyFieldError)))
+        repeatedPasswordEditText.check(matches(hasErrorText(emptyFieldError)))
     }
 
     @Test
-    fun pressSignUpWithEmptyPassword() {
+    fun pressSignUpWithEmptyPasswords() {
         emailEditText.perform(typeText(validEmail))
         signUpButton.perform(click())
         passwordEditText.check(matches(hasErrorText(emptyFieldError)))
+        repeatedPasswordEditText.check(matches(hasErrorText(emptyFieldError)))
     }
 
     @Test
     fun pressSignUpWithEmptyEmail() {
         passwordEditText.perform(typeText(validPassword))
+        repeatedPasswordEditText.perform(typeText(validPassword))
         signUpButton.perform(click())
         emailEditText.check(matches(hasErrorText(emptyFieldError)))
     }

@@ -64,7 +64,7 @@ class SignUpFragment : Fragment() {
         val email = binding.emailEditText.text.toString()
         val password = binding.passwordEditText.text.toString()
         val repeatedPassword = binding.repeatPasswordEditText.text.toString()
-        viewModel.signUpButtonPressed(email, password, repeatedPassword)
+        viewModel.tryToSignUp(email, password, repeatedPassword)
     }
 
     private fun updateUI(signUpUiState: SignUpUIState) {
