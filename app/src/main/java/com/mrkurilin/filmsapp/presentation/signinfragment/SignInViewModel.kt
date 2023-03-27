@@ -21,7 +21,7 @@ class SignInViewModel(
     private val _uiStateFlow = MutableStateFlow<SignInUIState>(SignInUIState.Initial)
     val uiStateFlow: StateFlow<SignInUIState> = _uiStateFlow.asStateFlow()
 
-    fun signInButtonPressed(email: String, password: String) {
+    fun tryToSignIn(email: String, password: String) {
         _uiStateFlow.value = SignInUIState.Loading
 
         if (email.isEmpty() || password.isEmpty()) {
