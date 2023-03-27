@@ -2,6 +2,7 @@ package com.mrkurilin.filmsapp.presentation.signinfragment
 
 import com.mrkurilin.filmsapp.data.EmailValidation
 import com.mrkurilin.filmsapp.data.PasswordValidation
+import com.mrkurilin.filmsapp.data.SignInFieldsValidation
 import com.mrkurilin.filmsapp.data.exceptions.EmptyFieldsException
 import com.mrkurilin.filmsapp.data.exceptions.InvalidEmailException
 import com.mrkurilin.filmsapp.data.exceptions.InvalidPasswordException
@@ -18,9 +19,14 @@ class SignInViewModelTest {
     private val invalidEmail = "invalidEmail"
     private val invalidPassword = "123"
 
+    private val signInFieldsValidation = SignInFieldsValidation(
+        EmailValidation(),
+        PasswordValidation()
+    )
+
     @Before
     fun setup() {
-        signInViewModel = SignInViewModel(EmailValidation(), PasswordValidation())
+        signInViewModel = SignInViewModel(signInFieldsValidation)
     }
 
     @Test

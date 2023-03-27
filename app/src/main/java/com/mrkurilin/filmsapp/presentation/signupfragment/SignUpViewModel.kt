@@ -3,45 +3,28 @@ package com.mrkurilin.filmsapp.presentation.signupfragment
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.mrkurilin.filmsapp.data.EmailValidation
-import com.mrkurilin.filmsapp.data.PasswordValidation
-import com.mrkurilin.filmsapp.data.exceptions.EmptyFieldsException
-import com.mrkurilin.filmsapp.data.exceptions.InvalidEmailException
-import com.mrkurilin.filmsapp.data.exceptions.InvalidPasswordException
-import com.mrkurilin.filmsapp.data.exceptions.PasswordsMismatchException
+import com.mrkurilin.filmsapp.data.SignUpFieldsValidation
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class SignUpViewModel(
-    private val emailValidation: EmailValidation,
-    private val passwordValidation: PasswordValidation,
+    private val signUpFieldsValidation: SignUpFieldsValidation,
 ) : ViewModel() {
 
-    val uiStateFlow = MutableStateFlow<SignUpUIState>(SignUpUIState.Initial)
+    private val _uiStateFlow = MutableStateFlow<SignUpUIState>(SignUpUIState.Initial)
+    val uiStateFlow: StateFlow<SignUpUIState> = _uiStateFlow.asStateFlow()
 
-    fun signUpButtonPressed(
-        email: String,
-        password: String,
-        passwordConfirmation: String,
-    ) {
+    fun tryToSignUp(email: String, password: String, passwordConfirmation: String) {
+        _uiStateFlow.value = SignUpUIState.Loading
+
         try {
-            if (email.isEmpty() || password.isEmpty() || passwordConfirmation.isEmpty()) {
-                throw EmptyFieldsException()
-            }
-            if (emailValidation.isInvalidEmail(email)) {
-                throw InvalidEmailException()
-            }
-            if (passwordValidation.isInvalidPassword(password)) {
-                throw InvalidPasswordException()
-            }
-            if (password != passwordConfirmation) {
-                throw PasswordsMismatchException()
-            }
+            signUpFieldsValidation.validateSignUpFields(email, password, passwordConfirmation)
 
             Firebase.auth.createUserWithEmailAndPassword(email, password)
-
-            uiStateFlow.value = SignUpUIState.SignedUp
+            _uiStateFlow.value = SignUpUIState.SignedUp
         } catch (e: Exception) {
-            uiStateFlow.value = SignUpUIState.Error(e)
+            _uiStateFlow.value = SignUpUIState.Error(e)
         }
     }
 }

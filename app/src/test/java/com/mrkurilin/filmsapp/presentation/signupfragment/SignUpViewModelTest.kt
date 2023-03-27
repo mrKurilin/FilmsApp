@@ -2,6 +2,7 @@ package com.mrkurilin.filmsapp.presentation.signupfragment
 
 import com.mrkurilin.filmsapp.data.EmailValidation
 import com.mrkurilin.filmsapp.data.PasswordValidation
+import com.mrkurilin.filmsapp.data.SignUpFieldsValidation
 import com.mrkurilin.filmsapp.data.exceptions.EmptyFieldsException
 import com.mrkurilin.filmsapp.data.exceptions.InvalidEmailException
 import com.mrkurilin.filmsapp.data.exceptions.InvalidPasswordException
@@ -20,9 +21,14 @@ class SignUpViewModelTest {
     private val invalidEmail = "invalidEmail"
     private val invalidPassword = "123"
 
+    private val signUpFieldsValidation = SignUpFieldsValidation(
+        EmailValidation(),
+        PasswordValidation()
+    )
+
     @Before
     fun setup() {
-        signUpViewModel = SignUpViewModel(EmailValidation(), PasswordValidation())
+        signUpViewModel = SignUpViewModel(signUpFieldsValidation)
     }
 
     @Test
@@ -32,7 +38,7 @@ class SignUpViewModelTest {
 
     @Test
     fun `empty values`() {
-        signUpViewModel.signUpButtonPressed("", "", "")
+        signUpViewModel.tryToSignUp("", "", "")
         val currentUiState = signUpViewModel.uiStateFlow.value
         assertTrue(currentUiState is SignUpUIState.Error)
         assertTrue((currentUiState as SignUpUIState.Error).exception is EmptyFieldsException)
@@ -40,7 +46,7 @@ class SignUpViewModelTest {
 
     @Test
     fun `empty email`() {
-        signUpViewModel.signUpButtonPressed("", validPassword, validPassword)
+        signUpViewModel.tryToSignUp("", validPassword, validPassword)
         val currentUiState = signUpViewModel.uiStateFlow.value
         assertTrue(currentUiState is SignUpUIState.Error)
         assertTrue((currentUiState as SignUpUIState.Error).exception is EmptyFieldsException)
@@ -48,7 +54,7 @@ class SignUpViewModelTest {
 
     @Test
     fun `empty password`() {
-        signUpViewModel.signUpButtonPressed(validEmail, "", validPassword)
+        signUpViewModel.tryToSignUp(validEmail, "", validPassword)
         val currentUiState = signUpViewModel.uiStateFlow.value
         if (currentUiState is SignUpUIState.Error) {
             assertTrue(currentUiState.exception is EmptyFieldsException)
@@ -59,7 +65,7 @@ class SignUpViewModelTest {
 
     @Test
     fun `invalid email`() {
-        signUpViewModel.signUpButtonPressed(invalidEmail, validPassword, validPassword)
+        signUpViewModel.tryToSignUp(invalidEmail, validPassword, validPassword)
         val currentUiState = signUpViewModel.uiStateFlow.value
         if (currentUiState is SignUpUIState.Error) {
             assertTrue(currentUiState.exception is InvalidEmailException)
@@ -70,7 +76,7 @@ class SignUpViewModelTest {
 
     @Test
     fun `invalid password`() {
-        signUpViewModel.signUpButtonPressed(validEmail, invalidPassword, invalidPassword)
+        signUpViewModel.tryToSignUp(validEmail, invalidPassword, invalidPassword)
         val currentUiState = signUpViewModel.uiStateFlow.value
         if (currentUiState is SignUpUIState.Error) {
             assertTrue(currentUiState.exception is InvalidPasswordException)
@@ -81,7 +87,7 @@ class SignUpViewModelTest {
 
     @Test
     fun `passwords mismatch`() {
-        signUpViewModel.signUpButtonPressed(validEmail, validPassword, validPassword2)
+        signUpViewModel.tryToSignUp(validEmail, validPassword, validPassword2)
         val currentUiState = signUpViewModel.uiStateFlow.value
         if (currentUiState is SignUpUIState.Error) {
             assertTrue(currentUiState.exception is PasswordsMismatchException)

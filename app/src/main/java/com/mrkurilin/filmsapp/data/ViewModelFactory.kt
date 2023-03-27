@@ -10,11 +10,16 @@ class ViewModelFactory {
 
     companion object {
 
+        private val emailValidation = EmailValidation()
+        private val passwordValidation = PasswordValidation()
+
         val SignInViewModel: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 SignInViewModel(
-                    emailValidation = EmailValidation(),
-                    passwordValidation = PasswordValidation()
+                    signInFieldsValidation = SignInFieldsValidation(
+                        emailValidation,
+                        passwordValidation
+                    )
                 )
             }
         }
@@ -22,8 +27,10 @@ class ViewModelFactory {
         val SignUpViewModel: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 SignUpViewModel(
-                    emailValidation = EmailValidation(),
-                    passwordValidation = PasswordValidation()
+                    signUpFieldsValidation = SignUpFieldsValidation(
+                        emailValidation,
+                        passwordValidation
+                    )
                 )
             }
         }
