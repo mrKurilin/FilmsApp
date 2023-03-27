@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -13,8 +14,7 @@ import com.mrkurilin.filmsapp.R
 import com.mrkurilin.filmsapp.data.ViewModelFactory
 import com.mrkurilin.filmsapp.data.exceptions.*
 import com.mrkurilin.filmsapp.data.extensions.EditTextExtensions.Companion.setEmptyError
-import com.mrkurilin.filmsapp.data.extensions.EditTextExtensions.Companion.setInvalidEmailError
-import com.mrkurilin.filmsapp.data.extensions.EditTextExtensions.Companion.setInvalidPasswordError
+import com.mrkurilin.filmsapp.data.extensions.FragmentExtensions.Companion.hideKeyboard
 import com.mrkurilin.filmsapp.data.extensions.FragmentExtensions.Companion.showLongToast
 import com.mrkurilin.filmsapp.databinding.FragmentSignInBinding
 import kotlinx.coroutines.launch
@@ -38,15 +38,21 @@ class SignInFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.signInButton.setOnClickListener {
-            viewModel.signInButtonPressed(
-                binding.emailEditText.text.toString(),
-                binding.passwordEditText.text.toString()
-            )
+            tryToSignIn()
         }
 
         binding.signUpTextView.setOnClickListener {
             val action = SignInFragmentDirections.actionSignInFragmentToSignUpFragment()
             findNavController().navigate(action)
+        }
+
+        binding.passwordEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                tryToSignIn()
+                true
+            } else {
+                false
+            }
         }
 
         lifecycleScope.launch {
@@ -72,6 +78,7 @@ class SignInFragment : Fragment() {
                 findNavController().navigate(action)
             }
             SignInUIState.Loading -> {
+                hideKeyboard()
                 binding.progressBar.visibility = View.VISIBLE
                 binding.signInGroup.visibility = View.INVISIBLE
             }
@@ -88,14 +95,14 @@ class SignInFragment : Fragment() {
                 binding.passwordEditText.setEmptyError()
             }
             is InvalidPasswordException -> {
-                binding.passwordEditText.setInvalidPasswordError()
+                binding.passwordEditText.error = getString(R.string.invalid_password)
             }
             is InvalidEmailException -> {
-                binding.emailEditText.setInvalidEmailError()
+                binding.emailEditText.error = getString(R.string.invalid_email)
             }
             is InvalidEmailAndPasswordException -> {
-                binding.emailEditText.setInvalidEmailError()
-                binding.passwordEditText.setInvalidPasswordError()
+                binding.passwordEditText.error = getString(R.string.invalid_password)
+                binding.emailEditText.error = getString(R.string.invalid_email)
             }
             else -> {
                 exception.printStackTrace()
@@ -110,7 +117,6 @@ class SignInFragment : Fragment() {
                 showLongToast(R.string.bad_formatted_email)
                 binding.emailEditText.error = getString(R.string.bad_formatted_email)
             }
-
             FirebaseAuthExceptionErrorCodes.ERROR_WRONG_PASSWORD,
             FirebaseAuthExceptionErrorCodes.ERROR_USER_NOT_FOUND,
             -> {
@@ -121,6 +127,13 @@ class SignInFragment : Fragment() {
                 showLongToast(R.string.wrong_email_or_password)
             }
         }
+    }
+
+    private fun tryToSignIn() {
+        viewModel.tryToSignIn(
+            binding.emailEditText.text.toString(),
+            binding.passwordEditText.text.toString()
+        )
     }
 
     override fun onDestroyView() {
