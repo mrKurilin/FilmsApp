@@ -12,13 +12,5 @@ class EditTextExtensions {
                 error = context.getString(R.string.field_should_not_be_empty)
             }
         }
-
-        fun EditText.setInvalidEmailError() {
-            error = context.getString(R.string.invalid_email)
-        }
-
-        fun EditText.setInvalidPasswordError() {
-            error = context.getString(R.string.invalid_password)
-        }
     }
 }

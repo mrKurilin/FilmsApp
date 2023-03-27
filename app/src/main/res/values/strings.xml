@@ -15,4 +15,7 @@
     <string name="field_should_not_be_empty">Поле не должно быть пустым</string>
     <string name="invalid_email">Неверный формат электронной почты</string>
     <string name="invalid_password">Неверный формат пароля</string>
+    <string name="repeat_password">Повторите пароль</string>
+    <string name="already_registered_question">Уже зарегистрированы?</string>
+    <string name="mismatch_password">Пароли не совпадают</string>
 </resources>
