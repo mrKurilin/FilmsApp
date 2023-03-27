@@ -6,6 +6,7 @@ import com.mrkurilin.filmsapp.data.exceptions.EmptyFieldsException
 import com.mrkurilin.filmsapp.data.exceptions.InvalidEmailException
 import com.mrkurilin.filmsapp.data.exceptions.InvalidPasswordException
 import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
 
@@ -13,7 +14,7 @@ class SignInViewModelTest {
 
     private lateinit var signInViewModel: SignInViewModel
     private val validEmail = "Test@test.test"
-    private val validPassword = "Test@test.test"
+    private val validPassword = "Qq12345678"
     private val invalidEmail = "invalidEmail"
     private val invalidPassword = "123"
 
@@ -29,40 +30,56 @@ class SignInViewModelTest {
 
     @Test
     fun `empty values`() {
-        signInViewModel.signInButtonPressed("", "")
+        signInViewModel.tryToSignIn("", "")
         val currentUiState = signInViewModel.uiStateFlow.value
-        assertTrue(currentUiState is SignInUIState.Error)
-        assertTrue((currentUiState as SignInUIState.Error).exception is EmptyFieldsException)
+        if (currentUiState is SignInUIState.Error) {
+            assertTrue(currentUiState.exception is EmptyFieldsException)
+        } else {
+            fail("Current UI State is not SignInUIState.Error")
+        }
     }
 
     @Test
     fun `empty email`() {
-        signInViewModel.signInButtonPressed("", validPassword)
+        signInViewModel.tryToSignIn("", validPassword)
         val currentUiState = signInViewModel.uiStateFlow.value
-        assertTrue(currentUiState is SignInUIState.Error)
-        assertTrue((currentUiState as SignInUIState.Error).exception is EmptyFieldsException)
+        if (currentUiState is SignInUIState.Error) {
+            assertTrue(currentUiState.exception is EmptyFieldsException)
+        } else {
+            fail("Current UI State is not SignInUIState.Error")
+        }
     }
 
     @Test
     fun `empty password`() {
-        signInViewModel.signInButtonPressed(validEmail, "")
+        signInViewModel.tryToSignIn(validEmail, "")
         val currentUiState = signInViewModel.uiStateFlow.value
-        assertTrue(currentUiState is SignInUIState.Error)
-        assertTrue((currentUiState as SignInUIState.Error).exception is EmptyFieldsException)
+        if (currentUiState is SignInUIState.Error) {
+            assertTrue(currentUiState.exception is EmptyFieldsException)
+        } else {
+            fail("Current UI State is not SignInUIState.Error")
+        }
     }
 
     @Test
     fun `invalid email`() {
-        signInViewModel.signInButtonPressed(invalidEmail, validPassword)
+        signInViewModel.tryToSignIn(invalidEmail, validPassword)
         val currentUiState = signInViewModel.uiStateFlow.value
-        assertTrue(currentUiState is SignInUIState.Error)
-        assertTrue((currentUiState as SignInUIState.Error).exception is InvalidEmailException)
+        if (currentUiState is SignInUIState.Error) {
+            assertTrue(currentUiState.exception is InvalidEmailException)
+        } else {
+            fail("Current UI State is not SignInUIState.Error")
+        }
     }
 
     @Test
     fun `invalid password`() {
-        signInViewModel.signInButtonPressed(validEmail, invalidPassword)
+        signInViewModel.tryToSignIn(validEmail, invalidPassword)
         val currentUiState = signInViewModel.uiStateFlow.value
-        assertTrue((currentUiState as SignInUIState.Error).exception is InvalidPasswordException)
+        if (currentUiState is SignInUIState.Error) {
+            assertTrue(currentUiState.exception is InvalidPasswordException)
+        } else {
+            fail("Current UI State is not SignInUIState.Error")
+        }
     }
 }
