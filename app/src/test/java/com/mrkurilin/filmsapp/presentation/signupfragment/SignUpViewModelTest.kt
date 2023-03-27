@@ -80,7 +80,7 @@ class SignUpViewModelTest {
     }
 
     @Test
-    fun `passwords mismatch`(){
+    fun `passwords mismatch`() {
         signUpViewModel.signUpButtonPressed(validEmail, validPassword, validPassword2)
         val currentUiState = signUpViewModel.uiStateFlow.value
         if (currentUiState is SignUpUIState.Error) {
