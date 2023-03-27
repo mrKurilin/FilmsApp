@@ -39,7 +39,7 @@ class PasswordValidationTest {
     }
 
     @Test
-    fun `norm password`(){
+    fun `norm password`() {
         assertFalse(passwordValidation.isInvalidPassword("Qq12345678"))
     }
 }

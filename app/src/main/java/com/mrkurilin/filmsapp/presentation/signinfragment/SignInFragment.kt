@@ -129,7 +129,7 @@ class SignInFragment : Fragment() {
         }
     }
 
-    private fun tryToSignIn(){
+    private fun tryToSignIn() {
         viewModel.tryToSignIn(
             binding.emailEditText.text.toString(),
             binding.passwordEditText.text.toString()
