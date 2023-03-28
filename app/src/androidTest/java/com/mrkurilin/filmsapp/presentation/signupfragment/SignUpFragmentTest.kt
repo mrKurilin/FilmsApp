@@ -25,9 +25,9 @@ import org.junit.runner.RunWith
 class SignUpFragmentTest {
 
     private val validEmail = "Test@test.test"
+    private val invalidEmail = "invalidEmail"
     private val validPassword = "Qq12345678"
     private val otherValidPassword = "Qq123456789"
-    private val invalidEmail = "invalidEmail"
     private val invalidPassword = "123"
 
     private lateinit var signUpButton: ViewInteraction
@@ -54,6 +54,9 @@ class SignUpFragmentTest {
     @Test
     fun pressSignUpWithEmptyFields() {
         signUpButton.perform(click())
+
+        checkSignUpGroupIsDisplayed()
+
         emailEditText.check(matches(hasErrorText(emptyFieldError)))
         passwordEditText.check(matches(hasErrorText(emptyFieldError)))
         repeatedPasswordEditText.check(matches(hasErrorText(emptyFieldError)))
@@ -62,7 +65,11 @@ class SignUpFragmentTest {
     @Test
     fun pressSignUpWithEmptyPasswords() {
         emailEditText.perform(typeText(validEmail))
+
         signUpButton.perform(click())
+
+        checkSignUpGroupIsDisplayed()
+
         passwordEditText.check(matches(hasErrorText(emptyFieldError)))
         repeatedPasswordEditText.check(matches(hasErrorText(emptyFieldError)))
     }
@@ -71,7 +78,11 @@ class SignUpFragmentTest {
     fun pressSignUpWithEmptyEmail() {
         passwordEditText.perform(typeText(validPassword))
         repeatedPasswordEditText.perform(typeText(validPassword))
+
         signUpButton.perform(click())
+
+        checkSignUpGroupIsDisplayed()
+
         emailEditText.check(matches(hasErrorText(emptyFieldError)))
     }
 
@@ -80,7 +91,11 @@ class SignUpFragmentTest {
         emailEditText.perform(typeText(validEmail))
         passwordEditText.perform(typeText(invalidPassword))
         repeatedPasswordEditText.perform(typeText(invalidPassword))
+
         signUpButton.perform(click())
+
+        checkSignUpGroupIsDisplayed()
+
         passwordEditText.check(matches(hasErrorText(invalidPasswordError)))
     }
 
@@ -89,7 +104,11 @@ class SignUpFragmentTest {
         emailEditText.perform(typeText(invalidEmail))
         passwordEditText.perform(typeText(validPassword))
         repeatedPasswordEditText.perform(typeText(validPassword))
+
         signUpButton.perform(click())
+
+        checkSignUpGroupIsDisplayed()
+
         emailEditText.check(matches(hasErrorText(invalidEmailError)))
     }
 
@@ -98,27 +117,33 @@ class SignUpFragmentTest {
         emailEditText.perform(typeText(validEmail))
         passwordEditText.perform(typeText(validPassword))
         repeatedPasswordEditText.perform(typeText(otherValidPassword))
+
         signUpButton.perform(click())
+
+        checkSignUpGroupIsDisplayed()
+
         repeatedPasswordEditText.check(matches(hasErrorText(mismatchPassword)))
     }
 
     @Test
     fun testNavigationToSignInFragment() {
-        // Create a TestNavHostController
         val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
 
         scenario.onFragment { fragment ->
-            // Set the graph on the TestNavHostController
             navController.setGraph(R.navigation.nav_graph)
             navController.navigate(R.id.signUpFragment)
 
-            // Make the NavController available via the findNavController() APIs
             Navigation.setViewNavController(fragment.requireView(), navController)
         }
 
-        // Verify that performing a click changes the NavController’s state
         signInTextView.perform(click())
         assertEquals(navController.currentDestination?.id, R.id.signInFragment)
+    }
+
+    private fun checkSignUpGroupIsDisplayed() {
+        emailEditText.check(matches(isDisplayed()))
+        passwordEditText.check(matches(isDisplayed()))
+        repeatedPasswordEditText.check(matches(isDisplayed()))
     }
 
     companion object {
