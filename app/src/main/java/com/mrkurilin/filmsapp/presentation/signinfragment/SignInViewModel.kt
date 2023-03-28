@@ -30,7 +30,6 @@ class SignInViewModel(
                     throw task.exception ?: UnsuccessfulTaskException()
                 }
             }
-
         } catch (e: Exception) {
             _uiStateFlow.value = SignInUIState.Error(e)
         }

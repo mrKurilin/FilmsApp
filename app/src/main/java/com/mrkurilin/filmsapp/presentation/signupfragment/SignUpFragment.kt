@@ -44,7 +44,7 @@ class SignUpFragment : Fragment() {
             findNavController().navigate(action)
         }
 
-        binding.passwordEditText.setOnEditorActionListener { _, actionId, _ ->
+        binding.repeatPasswordEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 tryToSignUp()
                 true
@@ -84,6 +84,8 @@ class SignUpFragment : Fragment() {
             }
             is SignUpUIState.Error -> {
                 handleException(signUpUiState.exception)
+                binding.progressBar.visibility = View.INVISIBLE
+                binding.signUpGroup.visibility = View.VISIBLE
             }
         }
     }
