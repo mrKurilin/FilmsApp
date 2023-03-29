@@ -1,37 +1,33 @@
 package com.mrkurilin.filmsapp.presentation.signupfragment
 
 import androidx.lifecycle.ViewModel
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import com.mrkurilin.filmsapp.data.SignUpFieldsValidation
-import com.mrkurilin.filmsapp.data.exceptions.UnsuccessfulTaskException
+import androidx.lifecycle.viewModelScope
+import com.mrkurilin.filmsapp.domain.credentialvalidation.SignUpUser
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class SignUpViewModel(
-    private val signUpFieldsValidation: SignUpFieldsValidation,
+    private val signUpUser: SignUpUser,
 ) : ViewModel() {
 
     private val _uiStateFlow = MutableStateFlow<SignUpUIState>(SignUpUIState.Initial)
-    val uiStateFlow: StateFlow<SignUpUIState> = _uiStateFlow.asStateFlow()
+    val uiStateFlow = _uiStateFlow.asStateFlow()
 
     fun tryToSignUp(email: String, password: String, passwordConfirmation: String) {
         _uiStateFlow.value = SignUpUIState.Loading
 
-        try {
-            signUpFieldsValidation.validateSignUpFields(email, password, passwordConfirmation)
-
-            val auth = Firebase.auth
-            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    _uiStateFlow.value = SignUpUIState.SignedUp
-                } else {
-                    throw task.exception ?: UnsuccessfulTaskException()
-                }
+        viewModelScope.launch {
+            val result = signUpUser.createUserWithEmailAndPassword(
+                email,
+                password,
+                passwordConfirmation
+            )
+            if (result.isSuccess) {
+                _uiStateFlow.value = SignUpUIState.SignedUp
+            } else {
+                _uiStateFlow.value = SignUpUIState.Error(result.requireException())
             }
-        } catch (e: Exception) {
-            _uiStateFlow.value = SignUpUIState.Error(e)
         }
     }
 }

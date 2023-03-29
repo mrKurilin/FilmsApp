@@ -47,7 +47,7 @@ class SignUpFragmentTest {
         signUpButton = onView(withId(R.id.sign_up_button))
         emailEditText = onView(withId(R.id.email_edit_text))
         passwordEditText = onView(withId(R.id.password_edit_text))
-        repeatedPasswordEditText = onView(withId(R.id.repeat_password_edit_text))
+        repeatedPasswordEditText = onView(withId(R.id.confirm_password_edit_text))
         signInTextView = onView(withId(R.id.sign_in_text_view))
     }
 
