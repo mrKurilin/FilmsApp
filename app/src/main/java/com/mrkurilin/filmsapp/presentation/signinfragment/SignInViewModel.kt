@@ -1,37 +1,29 @@
 package com.mrkurilin.filmsapp.presentation.signinfragment
 
 import androidx.lifecycle.ViewModel
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import com.mrkurilin.filmsapp.data.SignInFieldsValidation
-import com.mrkurilin.filmsapp.data.exceptions.UnsuccessfulTaskException
+import androidx.lifecycle.viewModelScope
+import com.mrkurilin.filmsapp.domain.credentialvalidation.SignInUser
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class SignInViewModel(
-    private val signInFieldsValidation: SignInFieldsValidation,
+    private val signInUser: SignInUser,
 ) : ViewModel() {
 
     private val _uiStateFlow = MutableStateFlow<SignInUIState>(SignInUIState.Initial)
-    val uiStateFlow: StateFlow<SignInUIState> = _uiStateFlow.asStateFlow()
+    val uiStateFlow = _uiStateFlow.asStateFlow()
 
     fun tryToSignIn(email: String, password: String) {
         _uiStateFlow.value = SignInUIState.Loading
 
-        try {
-            signInFieldsValidation.validateSignInFields(email, password)
-
-            val auth = Firebase.auth
-            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    _uiStateFlow.value = SignInUIState.SignedIn
-                } else {
-                    throw task.exception ?: UnsuccessfulTaskException()
-                }
+        viewModelScope.launch {
+            val result = signInUser.signInWithEmailAndPassword(email, password)
+            if (result.isSuccess) {
+                _uiStateFlow.value = SignInUIState.SignedIn
+            } else {
+                _uiStateFlow.value = SignInUIState.Error(result.requireException())
             }
-        } catch (e: Exception) {
-            _uiStateFlow.value = SignInUIState.Error(e)
         }
     }
 }

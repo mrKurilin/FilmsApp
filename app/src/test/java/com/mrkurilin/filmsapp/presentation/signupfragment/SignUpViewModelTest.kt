@@ -1,15 +1,16 @@
 package com.mrkurilin.filmsapp.presentation.signupfragment
 
-import com.mrkurilin.filmsapp.data.EmailValidation
-import com.mrkurilin.filmsapp.data.PasswordValidation
-import com.mrkurilin.filmsapp.data.SignUpFieldsValidation
-import com.mrkurilin.filmsapp.data.exceptions.EmptyFieldsException
-import com.mrkurilin.filmsapp.data.exceptions.InvalidEmailException
-import com.mrkurilin.filmsapp.data.exceptions.InvalidPasswordException
-import com.mrkurilin.filmsapp.data.exceptions.PasswordsMismatchException
-import org.junit.Assert.assertTrue
-import org.junit.Assert.fail
+import com.mrkurilin.filmsapp.MainDispatcherRule
+import com.mrkurilin.filmsapp.domain.credentialvalidation.AuthField
+import com.mrkurilin.filmsapp.domain.credentialvalidation.EmailValidation
+import com.mrkurilin.filmsapp.domain.credentialvalidation.PasswordValidation
+import com.mrkurilin.filmsapp.domain.credentialvalidation.SignUpUser
+import com.mrkurilin.filmsapp.domain.exceptions.EmptyFieldsException
+import com.mrkurilin.filmsapp.domain.exceptions.InvalidFieldsException
+import com.mrkurilin.filmsapp.domain.exceptions.PasswordsMismatchException
+import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 class SignUpViewModelTest {
@@ -21,14 +22,17 @@ class SignUpViewModelTest {
     private val invalidEmail = "invalidEmail"
     private val invalidPassword = "123"
 
-    private val signUpFieldsValidation = SignUpFieldsValidation(
+    private val signUpUser = SignUpUser(
         EmailValidation(),
         PasswordValidation()
     )
 
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     @Before
     fun setup() {
-        signUpViewModel = SignUpViewModel(signUpFieldsValidation)
+        signUpViewModel = SignUpViewModel(signUpUser)
     }
 
     @Test
@@ -39,17 +43,35 @@ class SignUpViewModelTest {
     @Test
     fun `empty values`() {
         signUpViewModel.tryToSignUp("", "", "")
+
         val currentUiState = signUpViewModel.uiStateFlow.value
-        assertTrue(currentUiState is SignUpUIState.Error)
-        assertTrue((currentUiState as SignUpUIState.Error).exception is EmptyFieldsException)
+
+        if (currentUiState is SignUpUIState.Error) {
+            val expected = EmptyFieldsException(
+                listOf(
+                    AuthField.Email,
+                    AuthField.Password,
+                    AuthField.ConfirmPassword
+                )
+            )
+            assertEquals(expected, currentUiState.exception)
+        } else {
+            fail("current UI state is not SignUpUIState.Error")
+        }
     }
 
     @Test
     fun `empty email`() {
         signUpViewModel.tryToSignUp("", validPassword, validPassword)
+
         val currentUiState = signUpViewModel.uiStateFlow.value
-        assertTrue(currentUiState is SignUpUIState.Error)
-        assertTrue((currentUiState as SignUpUIState.Error).exception is EmptyFieldsException)
+
+        if (currentUiState is SignUpUIState.Error) {
+            val expected = EmptyFieldsException(listOf(AuthField.Email))
+            assertEquals(expected, currentUiState.exception)
+        } else {
+            fail("current UI state is not SignUpUIState.Error")
+        }
     }
 
     @Test
@@ -57,7 +79,8 @@ class SignUpViewModelTest {
         signUpViewModel.tryToSignUp(validEmail, "", validPassword)
         val currentUiState = signUpViewModel.uiStateFlow.value
         if (currentUiState is SignUpUIState.Error) {
-            assertTrue(currentUiState.exception is EmptyFieldsException)
+            val expected = EmptyFieldsException(listOf(AuthField.Password))
+            assertEquals(expected, currentUiState.exception)
         } else {
             fail("current UI state is not SignUpUIState.Error")
         }
@@ -68,7 +91,8 @@ class SignUpViewModelTest {
         signUpViewModel.tryToSignUp(invalidEmail, validPassword, validPassword)
         val currentUiState = signUpViewModel.uiStateFlow.value
         if (currentUiState is SignUpUIState.Error) {
-            assertTrue(currentUiState.exception is InvalidEmailException)
+            val expected = InvalidFieldsException(listOf(AuthField.Email))
+            assertEquals(expected, currentUiState.exception)
         } else {
             fail("current UI state is not SignUpUIState.Error")
         }
@@ -79,7 +103,8 @@ class SignUpViewModelTest {
         signUpViewModel.tryToSignUp(validEmail, invalidPassword, invalidPassword)
         val currentUiState = signUpViewModel.uiStateFlow.value
         if (currentUiState is SignUpUIState.Error) {
-            assertTrue(currentUiState.exception is InvalidPasswordException)
+            val expected = InvalidFieldsException(listOf(AuthField.Password))
+            assertEquals(expected, currentUiState.exception)
         } else {
             fail("current UI state is not SignUpUIState.Error")
         }

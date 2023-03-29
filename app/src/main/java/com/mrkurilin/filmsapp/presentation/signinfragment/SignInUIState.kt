@@ -8,5 +8,5 @@ sealed class SignInUIState {
 
     object SignedIn : SignInUIState()
 
-    class Error(val exception: Exception) : SignInUIState()
+    data class Error(val exception: Throwable) : SignInUIState()
 }

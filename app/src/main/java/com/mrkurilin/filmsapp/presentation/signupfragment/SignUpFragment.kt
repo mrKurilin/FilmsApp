@@ -9,21 +9,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.firebase.auth.FirebaseAuthException
-import com.mrkurilin.filmsapp.R
-import com.mrkurilin.filmsapp.data.ViewModelFactory
-import com.mrkurilin.filmsapp.data.exceptions.*
-import com.mrkurilin.filmsapp.data.extensions.EditTextExtensions.Companion.setEmptyError
-import com.mrkurilin.filmsapp.data.extensions.FragmentExtensions.Companion.hideKeyboard
-import com.mrkurilin.filmsapp.data.extensions.FragmentExtensions.Companion.showLongToast
 import com.mrkurilin.filmsapp.databinding.FragmentSignUpBinding
+import com.mrkurilin.filmsapp.presentation.ViewModelFactory
+import com.mrkurilin.filmsapp.presentation.exceptionhandler.SignUpExceptionHandleChain
+import com.mrkurilin.filmsapp.util.extensions.hideKeyboard
 import kotlinx.coroutines.launch
 
 class SignUpFragment : Fragment() {
 
-    private val viewModel: SignUpViewModel by viewModels { ViewModelFactory.SignUpViewModel }
+    private val viewModel: SignUpViewModel by viewModels { ViewModelFactory.signUpViewModel }
+
     private var _binding: FragmentSignUpBinding? = null
     private val binding get() = _binding!!
+
+    private val signUpExceptionHandleChain = SignUpExceptionHandleChain()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,7 +43,7 @@ class SignUpFragment : Fragment() {
             findNavController().navigate(action)
         }
 
-        binding.repeatPasswordEditText.setOnEditorActionListener { _, actionId, _ ->
+        binding.confirmPasswordEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 tryToSignUp()
                 true
@@ -63,7 +62,7 @@ class SignUpFragment : Fragment() {
     private fun tryToSignUp() {
         val email = binding.emailEditText.text.toString()
         val password = binding.passwordEditText.text.toString()
-        val repeatedPassword = binding.repeatPasswordEditText.text.toString()
+        val repeatedPassword = binding.confirmPasswordEditText.text.toString()
         viewModel.tryToSignUp(email, password, repeatedPassword)
     }
 
@@ -90,48 +89,14 @@ class SignUpFragment : Fragment() {
         }
     }
 
-    private fun handleException(exception: Exception) {
-        when (exception) {
-            is FirebaseAuthException -> {
-                handleFirebaseAuthException(exception)
-            }
-            is EmptyFieldsException -> {
-                binding.emailEditText.setEmptyError()
-                binding.passwordEditText.setEmptyError()
-                binding.repeatPasswordEditText.setEmptyError()
-            }
-            is InvalidEmailException -> {
-                binding.emailEditText.error = getString(R.string.invalid_email)
-            }
-            is InvalidPasswordException -> {
-                binding.passwordEditText.error = getString(R.string.invalid_password)
-            }
-            is PasswordsMismatchException -> {
-                binding.repeatPasswordEditText.error = getString(R.string.mismatch_password)
-            }
-            is InvalidEmailAndPasswordException -> {
-                binding.passwordEditText.error = getString(R.string.invalid_password)
-                binding.emailEditText.error = getString(R.string.invalid_email)
-            }
-        }
-    }
-
-    private fun handleFirebaseAuthException(firebaseAuthException: FirebaseAuthException) {
-        when (firebaseAuthException.errorCode) {
-            FirebaseAuthExceptionErrorCodes.ERROR_INVALID_EMAIL -> {
-                showLongToast(R.string.bad_formatted_email)
-                binding.emailEditText.error = getString(R.string.bad_formatted_email)
-            }
-            FirebaseAuthExceptionErrorCodes.ERROR_WRONG_PASSWORD,
-            FirebaseAuthExceptionErrorCodes.ERROR_USER_NOT_FOUND,
-            -> {
-                showLongToast(R.string.wrong_email_or_password)
-            }
-
-            else -> {
-                showLongToast(R.string.wrong_email_or_password)
-            }
-        }
+    private fun handleException(exception: Throwable) {
+        signUpExceptionHandleChain.handle(
+            exception,
+            binding.emailEditText,
+            binding.passwordEditText,
+            binding.confirmPasswordEditText,
+            requireContext()
+        )
     }
 
     override fun onDestroyView() {
