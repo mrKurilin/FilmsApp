@@ -14,7 +14,7 @@ class SignUpUser(
     private val passwordValidation: PasswordValidation,
 ) {
 
-    suspend fun createUserWithEmailAndPassword(
+    suspend fun createUser(
         email: String,
         password: String,
         passwordConfirmation: String,
@@ -42,9 +42,11 @@ class SignUpUser(
         if (email.isBlank()) {
             emptyFields.add(AuthField.Email)
         }
+
         if (password.isBlank()) {
             emptyFields.add(AuthField.Password)
         }
+
         if (passwordConfirmation.isBlank()) {
             emptyFields.add(AuthField.ConfirmPassword)
         }
@@ -64,9 +66,11 @@ class SignUpUser(
         }
 
         val invalidFields = mutableListOf<AuthField>()
+
         if (emailValidation.isInvalidEmail(email)) {
             invalidFields.add(AuthField.Email)
         }
+
         if (passwordValidation.isInvalidPassword(password)) {
             invalidFields.add(AuthField.Password)
         }

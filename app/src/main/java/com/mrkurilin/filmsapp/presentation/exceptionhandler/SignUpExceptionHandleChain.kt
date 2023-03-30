@@ -39,7 +39,7 @@ class SignUpExceptionHandleChain {
 
         val passwordsMismatchExceptionHandler = PasswordsMismatchExceptionHandler(
             confirmPasswordEditText = confirmPasswordEditText,
-            firebaseNetworkException
+            nextExceptionHandler =  firebaseNetworkException
         )
 
         passwordsMismatchExceptionHandler.handle(exception)

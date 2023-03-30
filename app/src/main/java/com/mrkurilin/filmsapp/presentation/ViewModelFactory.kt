@@ -24,10 +24,7 @@ class ViewModelFactory {
 
         val signUpViewModel = viewModelFactory {
             initializer {
-                SignUpViewModel(
-                    SignUpUser(emailValidation, passwordValidation
-                    )
-                )
+                SignUpViewModel(SignUpUser(emailValidation, passwordValidation))
             }
         }
     }

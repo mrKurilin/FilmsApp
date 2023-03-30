@@ -18,7 +18,6 @@ class SignUpViewModelTest {
     private lateinit var signUpViewModel: SignUpViewModel
     private val validEmail = "Test@test.test"
     private val validPassword = "Kotlin123@#"
-    private val validPassword2 = "Kotlin1234@#"
     private val invalidEmail = "invalidEmail"
     private val invalidPassword = "123"
 
@@ -37,7 +36,7 @@ class SignUpViewModelTest {
 
     @Test
     fun `initial UI state`() {
-        assertTrue(signUpViewModel.uiStateFlow.value == SignUpUIState.Initial)
+        assertEquals(SignUpUIState.Initial, signUpViewModel.uiStateFlow.value)
     }
 
     @Test
@@ -48,11 +47,7 @@ class SignUpViewModelTest {
 
         if (currentUiState is SignUpUIState.Error) {
             val expected = EmptyFieldsException(
-                listOf(
-                    AuthField.Email,
-                    AuthField.Password,
-                    AuthField.ConfirmPassword
-                )
+                listOf(AuthField.Email, AuthField.Password, AuthField.ConfirmPassword)
             )
             assertEquals(expected, currentUiState.exception)
         } else {
@@ -77,7 +72,9 @@ class SignUpViewModelTest {
     @Test
     fun `empty password`() {
         signUpViewModel.tryToSignUp(validEmail, "", validPassword)
+
         val currentUiState = signUpViewModel.uiStateFlow.value
+
         if (currentUiState is SignUpUIState.Error) {
             val expected = EmptyFieldsException(listOf(AuthField.Password))
             assertEquals(expected, currentUiState.exception)
@@ -89,7 +86,9 @@ class SignUpViewModelTest {
     @Test
     fun `invalid email`() {
         signUpViewModel.tryToSignUp(invalidEmail, validPassword, validPassword)
+
         val currentUiState = signUpViewModel.uiStateFlow.value
+
         if (currentUiState is SignUpUIState.Error) {
             val expected = InvalidFieldsException(listOf(AuthField.Email))
             assertEquals(expected, currentUiState.exception)
@@ -101,7 +100,9 @@ class SignUpViewModelTest {
     @Test
     fun `invalid password`() {
         signUpViewModel.tryToSignUp(validEmail, invalidPassword, invalidPassword)
+
         val currentUiState = signUpViewModel.uiStateFlow.value
+
         if (currentUiState is SignUpUIState.Error) {
             val expected = InvalidFieldsException(listOf(AuthField.Password))
             assertEquals(expected, currentUiState.exception)
@@ -112,8 +113,12 @@ class SignUpViewModelTest {
 
     @Test
     fun `passwords mismatch`() {
-        signUpViewModel.tryToSignUp(validEmail, validPassword, validPassword2)
+        val otherValidPassword = "Kotlin1234@#"
+
+        signUpViewModel.tryToSignUp(validEmail, validPassword, otherValidPassword)
+
         val currentUiState = signUpViewModel.uiStateFlow.value
+
         if (currentUiState is SignUpUIState.Error) {
             assertTrue(currentUiState.exception is PasswordsMismatchException)
         } else {
