@@ -18,11 +18,8 @@ class SignUpViewModel(
         _uiStateFlow.value = SignUpUIState.Loading
 
         viewModelScope.launch {
-            val result = signUpUser.createUserWithEmailAndPassword(
-                email,
-                password,
-                passwordConfirmation
-            )
+            val result = signUpUser.createUser(email, password, passwordConfirmation)
+
             if (result.isSuccess) {
                 _uiStateFlow.value = SignUpUIState.SignedUp
             } else {

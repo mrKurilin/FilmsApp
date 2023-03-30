@@ -37,7 +37,7 @@ class SignInViewModelTest {
 
     @Test
     fun `initial UI state`() {
-        assertTrue(signInViewModel.uiStateFlow.value == SignInUIState.Initial)
+        assertEquals(SignInUIState.Initial, signInViewModel.uiStateFlow.value)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -86,7 +86,9 @@ class SignInViewModelTest {
     @Test
     fun `invalid email`() {
         signInViewModel.tryToSignIn(invalidEmail, validPassword)
+
         val currentUiState = signInViewModel.uiStateFlow.value
+
         if (currentUiState is SignInUIState.Error) {
             val expected = InvalidFieldsException(listOf(AuthField.Email))
             assertEquals(expected, currentUiState.exception)
@@ -98,10 +100,12 @@ class SignInViewModelTest {
     @Test
     fun `invalid password`() {
         signInViewModel.tryToSignIn(validEmail, invalidPassword)
+
         val currentUiState = signInViewModel.uiStateFlow.value
+
         if (currentUiState is SignInUIState.Error) {
             val expected = InvalidFieldsException(listOf(AuthField.Password))
-            assertTrue(currentUiState.exception == expected)
+            assertEquals(expected, currentUiState.exception)
         } else {
             fail("Current UI State is not SignInUIState.Error")
         }

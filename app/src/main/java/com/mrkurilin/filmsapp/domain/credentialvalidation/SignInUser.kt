@@ -40,6 +40,7 @@ class SignInUser(
         if (email.isBlank()) {
             emptyFields.add(AuthField.Email)
         }
+
         if (password.isBlank()) {
             emptyFields.add(AuthField.Password)
         }
@@ -55,6 +56,7 @@ class SignInUser(
         if (emailValidation.isInvalidEmail(email)) {
             invalidFields.add(AuthField.Email)
         }
+
         if (passwordValidation.isInvalidPassword(password)) {
             invalidFields.add(AuthField.Password)
         }
