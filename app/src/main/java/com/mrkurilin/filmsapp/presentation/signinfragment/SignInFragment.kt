@@ -9,21 +9,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.firebase.auth.FirebaseAuthException
-import com.mrkurilin.filmsapp.R
-import com.mrkurilin.filmsapp.data.ViewModelFactory
-import com.mrkurilin.filmsapp.data.exceptions.*
-import com.mrkurilin.filmsapp.data.extensions.EditTextExtensions.Companion.setEmptyError
-import com.mrkurilin.filmsapp.data.extensions.FragmentExtensions.Companion.hideKeyboard
-import com.mrkurilin.filmsapp.data.extensions.FragmentExtensions.Companion.showLongToast
 import com.mrkurilin.filmsapp.databinding.FragmentSignInBinding
+import com.mrkurilin.filmsapp.presentation.ViewModelFactory
+import com.mrkurilin.filmsapp.presentation.exceptionhandler.SignInExceptionHandleChain
+import com.mrkurilin.filmsapp.util.extensions.hideKeyboard
 import kotlinx.coroutines.launch
 
 class SignInFragment : Fragment() {
 
-    private val viewModel: SignInViewModel by viewModels { ViewModelFactory.SignInViewModel }
+    private val viewModel: SignInViewModel by viewModels { ViewModelFactory.signInViewModel }
+
     private var _binding: FragmentSignInBinding? = null
     private val binding get() = _binding!!
+
+    private val signInExceptionHandleChain = SignInExceptionHandleChain()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -85,48 +84,13 @@ class SignInFragment : Fragment() {
         }
     }
 
-    private fun handleException(exception: Exception) {
-        when (exception) {
-            is FirebaseAuthException -> {
-                handleFirebaseAuthException(exception)
-            }
-            is EmptyFieldsException -> {
-                binding.emailEditText.setEmptyError()
-                binding.passwordEditText.setEmptyError()
-            }
-            is InvalidPasswordException -> {
-                binding.passwordEditText.error = getString(R.string.invalid_password)
-            }
-            is InvalidEmailException -> {
-                binding.emailEditText.error = getString(R.string.invalid_email)
-            }
-            is InvalidEmailAndPasswordException -> {
-                binding.passwordEditText.error = getString(R.string.invalid_password)
-                binding.emailEditText.error = getString(R.string.invalid_email)
-            }
-            else -> {
-                exception.printStackTrace()
-                showLongToast(R.string.unknown_error)
-            }
-        }
-    }
-
-    private fun handleFirebaseAuthException(firebaseAuthException: FirebaseAuthException) {
-        when (firebaseAuthException.errorCode) {
-            FirebaseAuthExceptionErrorCodes.ERROR_INVALID_EMAIL -> {
-                showLongToast(R.string.bad_formatted_email)
-                binding.emailEditText.error = getString(R.string.bad_formatted_email)
-            }
-            FirebaseAuthExceptionErrorCodes.ERROR_WRONG_PASSWORD,
-            FirebaseAuthExceptionErrorCodes.ERROR_USER_NOT_FOUND,
-            -> {
-                showLongToast(R.string.wrong_email_or_password)
-            }
-
-            else -> {
-                showLongToast(R.string.wrong_email_or_password)
-            }
-        }
+    private fun handleException(exception: Throwable) {
+        signInExceptionHandleChain.handle(
+            exception,
+            binding.emailEditText,
+            binding.passwordEditText,
+            requireContext()
+        )
     }
 
     private fun tryToSignIn() {
