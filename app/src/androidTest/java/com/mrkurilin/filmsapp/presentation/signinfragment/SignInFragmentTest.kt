@@ -24,9 +24,7 @@ import org.junit.runner.RunWith
 class SignInFragmentTest {
 
     private val validEmail = "Test@test.test"
-    private val invalidEmail = "invalidEmail"
     private val validPassword = "Qq12345678"
-    private val invalidPassword = "123"
 
     private lateinit var signInButton: ViewInteraction
     private lateinit var emailEditText: ViewInteraction
@@ -80,6 +78,8 @@ class SignInFragmentTest {
 
     @Test
     fun pressSignInWithValidEmailAndInvalidPassword() {
+        val invalidPassword = "123"
+
         passwordEditText.perform(typeText(invalidPassword))
         emailEditText.perform(typeText(validEmail))
 
@@ -92,6 +92,8 @@ class SignInFragmentTest {
 
     @Test
     fun pressSignInWithInvalidEmailAndValidPassword() {
+        val invalidEmail = "invalidEmail"
+
         emailEditText.perform(typeText(invalidEmail))
         passwordEditText.perform(typeText(validPassword))
 

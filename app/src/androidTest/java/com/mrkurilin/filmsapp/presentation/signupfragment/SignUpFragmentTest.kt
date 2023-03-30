@@ -25,10 +25,7 @@ import org.junit.runner.RunWith
 class SignUpFragmentTest {
 
     private val validEmail = "Test@test.test"
-    private val invalidEmail = "invalidEmail"
     private val validPassword = "Qq12345678"
-    private val otherValidPassword = "Qq123456789"
-    private val invalidPassword = "123"
 
     private lateinit var signUpButton: ViewInteraction
     private lateinit var emailEditText: ViewInteraction
@@ -47,7 +44,7 @@ class SignUpFragmentTest {
         signUpButton = onView(withId(R.id.sign_up_button))
         emailEditText = onView(withId(R.id.email_edit_text))
         passwordEditText = onView(withId(R.id.password_edit_text))
-        repeatedPasswordEditText = onView(withId(R.id.repeat_password_edit_text))
+        repeatedPasswordEditText = onView(withId(R.id.confirm_password_edit_text))
         signInTextView = onView(withId(R.id.sign_in_text_view))
     }
 
@@ -88,6 +85,8 @@ class SignUpFragmentTest {
 
     @Test
     fun pressSignUpWithValidEmailAndInvalidPassword() {
+        val invalidPassword = "123"
+
         emailEditText.perform(typeText(validEmail))
         passwordEditText.perform(typeText(invalidPassword))
         repeatedPasswordEditText.perform(typeText(invalidPassword))
@@ -101,6 +100,8 @@ class SignUpFragmentTest {
 
     @Test
     fun pressSignUpWithInvalidEmailAndValidPasswords() {
+        val invalidEmail = "invalidEmail"
+
         emailEditText.perform(typeText(invalidEmail))
         passwordEditText.perform(typeText(validPassword))
         repeatedPasswordEditText.perform(typeText(validPassword))
@@ -114,6 +115,8 @@ class SignUpFragmentTest {
 
     @Test
     fun pressSignUpWithValidEmailAndDifferentPasswords() {
+        val otherValidPassword = "Qq123456789"
+
         emailEditText.perform(typeText(validEmail))
         passwordEditText.perform(typeText(validPassword))
         repeatedPasswordEditText.perform(typeText(otherValidPassword))
