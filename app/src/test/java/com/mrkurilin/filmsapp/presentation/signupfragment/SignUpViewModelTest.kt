@@ -8,7 +8,8 @@ import com.mrkurilin.filmsapp.domain.credentialvalidation.SignUpUser
 import com.mrkurilin.filmsapp.domain.exceptions.EmptyFieldsException
 import com.mrkurilin.filmsapp.domain.exceptions.InvalidFieldsException
 import com.mrkurilin.filmsapp.domain.exceptions.PasswordsMismatchException
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -45,14 +46,11 @@ class SignUpViewModelTest {
 
         val currentUiState = signUpViewModel.uiStateFlow.value
 
-        if (currentUiState is SignUpUIState.Error) {
-            val expected = EmptyFieldsException(
-                listOf(AuthField.Email, AuthField.Password, AuthField.ConfirmPassword)
-            )
-            assertEquals(expected, currentUiState.exception)
-        } else {
-            fail("current UI state is not SignUpUIState.Error")
-        }
+        val expected = EmptyFieldsException(
+            listOf(AuthField.Email, AuthField.Password, AuthField.ConfirmPassword)
+        )
+        val actual = (currentUiState as SignUpUIState.Error).exception
+        assertEquals(expected, actual)
     }
 
     @Test
@@ -61,12 +59,9 @@ class SignUpViewModelTest {
 
         val currentUiState = signUpViewModel.uiStateFlow.value
 
-        if (currentUiState is SignUpUIState.Error) {
-            val expected = EmptyFieldsException(listOf(AuthField.Email))
-            assertEquals(expected, currentUiState.exception)
-        } else {
-            fail("current UI state is not SignUpUIState.Error")
-        }
+        val expected = EmptyFieldsException(listOf(AuthField.Email))
+        val actual = (currentUiState as SignUpUIState.Error).exception
+        assertEquals(expected, actual)
     }
 
     @Test
@@ -75,12 +70,9 @@ class SignUpViewModelTest {
 
         val currentUiState = signUpViewModel.uiStateFlow.value
 
-        if (currentUiState is SignUpUIState.Error) {
-            val expected = EmptyFieldsException(listOf(AuthField.Password))
-            assertEquals(expected, currentUiState.exception)
-        } else {
-            fail("current UI state is not SignUpUIState.Error")
-        }
+        val expected = EmptyFieldsException(listOf(AuthField.Password))
+        val actual = (currentUiState as SignUpUIState.Error).exception
+        assertEquals(expected, actual)
     }
 
     @Test
@@ -89,12 +81,9 @@ class SignUpViewModelTest {
 
         val currentUiState = signUpViewModel.uiStateFlow.value
 
-        if (currentUiState is SignUpUIState.Error) {
-            val expected = InvalidFieldsException(listOf(AuthField.Email))
-            assertEquals(expected, currentUiState.exception)
-        } else {
-            fail("current UI state is not SignUpUIState.Error")
-        }
+        val expected = InvalidFieldsException(listOf(AuthField.Email))
+        val actual = (currentUiState as SignUpUIState.Error).exception
+        assertEquals(expected, actual)
     }
 
     @Test
@@ -103,12 +92,9 @@ class SignUpViewModelTest {
 
         val currentUiState = signUpViewModel.uiStateFlow.value
 
-        if (currentUiState is SignUpUIState.Error) {
-            val expected = InvalidFieldsException(listOf(AuthField.Password))
-            assertEquals(expected, currentUiState.exception)
-        } else {
-            fail("current UI state is not SignUpUIState.Error")
-        }
+        val expected = InvalidFieldsException(listOf(AuthField.Password))
+        val actual = (currentUiState as SignUpUIState.Error).exception
+        assertEquals(expected, actual)
     }
 
     @Test
@@ -118,11 +104,7 @@ class SignUpViewModelTest {
         signUpViewModel.tryToSignUp(validEmail, validPassword, otherValidPassword)
 
         val currentUiState = signUpViewModel.uiStateFlow.value
-
-        if (currentUiState is SignUpUIState.Error) {
-            assertTrue(currentUiState.exception is PasswordsMismatchException)
-        } else {
-            fail("current UI state is not SignUpUIState.Error")
-        }
+        val actualException = (currentUiState as SignUpUIState.Error).exception
+        assertTrue(actualException is PasswordsMismatchException)
     }
 }
