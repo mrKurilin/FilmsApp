@@ -47,12 +47,9 @@ class SignInViewModelTest {
 
         val currentUiState = signInViewModel.uiStateFlow.value
 
-        if (currentUiState is SignInUIState.Error) {
-            val expected = EmptyFieldsException(listOf(AuthField.Email, AuthField.Password))
-            assertEquals(expected, currentUiState.exception)
-        } else {
-            fail("Current UI State is not SignInUIState.Error")
-        }
+        val expected = EmptyFieldsException(listOf(AuthField.Email, AuthField.Password))
+        val actual = (currentUiState as SignInUIState.Error).exception
+        assertEquals(expected, actual)
     }
 
     @Test
@@ -61,12 +58,9 @@ class SignInViewModelTest {
 
         val currentUiState = signInViewModel.uiStateFlow.value
 
-        if (currentUiState is SignInUIState.Error) {
-            val expected = EmptyFieldsException(listOf(AuthField.Email))
-            assertEquals(expected, currentUiState.exception)
-        } else {
-            fail("Current UI State is not SignInUIState.Error")
-        }
+        val expected = EmptyFieldsException(listOf(AuthField.Email))
+        val actual = (currentUiState as SignInUIState.Error).exception
+        assertEquals(expected, actual)
     }
 
     @Test
@@ -75,12 +69,9 @@ class SignInViewModelTest {
 
         val currentUiState = signInViewModel.uiStateFlow.value
 
-        if (currentUiState is SignInUIState.Error) {
-            val expected = EmptyFieldsException(listOf(AuthField.Password))
-            assertEquals(expected, currentUiState.exception)
-        } else {
-            fail("Current UI State is not SignInUIState.Error")
-        }
+        val expected = EmptyFieldsException(listOf(AuthField.Password))
+        val actual = (currentUiState as SignInUIState.Error).exception
+        assertEquals(expected, actual)
     }
 
     @Test
@@ -89,12 +80,9 @@ class SignInViewModelTest {
 
         val currentUiState = signInViewModel.uiStateFlow.value
 
-        if (currentUiState is SignInUIState.Error) {
-            val expected = InvalidFieldsException(listOf(AuthField.Email))
-            assertEquals(expected, currentUiState.exception)
-        } else {
-            fail("Current UI State is not SignInUIState.Error")
-        }
+        val expected = InvalidFieldsException(listOf(AuthField.Email))
+        val actual = (currentUiState as SignInUIState.Error).exception
+        assertEquals(expected, actual)
     }
 
     @Test
@@ -103,11 +91,8 @@ class SignInViewModelTest {
 
         val currentUiState = signInViewModel.uiStateFlow.value
 
-        if (currentUiState is SignInUIState.Error) {
-            val expected = InvalidFieldsException(listOf(AuthField.Password))
-            assertEquals(expected, currentUiState.exception)
-        } else {
-            fail("Current UI State is not SignInUIState.Error")
-        }
+        val expected = InvalidFieldsException(listOf(AuthField.Password))
+        val actual = (currentUiState as SignInUIState.Error).exception
+        assertEquals(expected, actual)
     }
 }

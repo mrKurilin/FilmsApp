@@ -13,7 +13,7 @@ class InvalidFieldsExceptionHandler(
 
     override fun handle(exception: Throwable) {
         if (exception is InvalidFieldsException) {
-            exception.invalidFields.forEach { authField ->
+            exception.invalidAuthFields.forEach { authField ->
                 setInvalidFieldError(authField)
             }
         } else {
