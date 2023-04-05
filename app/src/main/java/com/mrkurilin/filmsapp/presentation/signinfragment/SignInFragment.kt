@@ -1,28 +1,38 @@
 package com.mrkurilin.filmsapp.presentation.signinfragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.mrkurilin.filmsapp.databinding.FragmentSignInBinding
-import com.mrkurilin.filmsapp.presentation.ViewModelFactory
-import com.mrkurilin.filmsapp.presentation.exceptionhandler.SignInExceptionHandleChain
+import com.mrkurilin.filmsapp.presentation.exceptionhandler.AuthExceptionHandleChain
+import com.mrkurilin.filmsapp.util.extensions.appComponent
 import com.mrkurilin.filmsapp.util.extensions.hideKeyboard
+import com.mrkurilin.filmsapp.util.extensions.lazyViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class SignInFragment : Fragment() {
 
-    private val viewModel: SignInViewModel by viewModels { ViewModelFactory.signInViewModel }
+    private val viewModel: SignInViewModel by lazyViewModel { stateHandle ->
+        appComponent().signInViewModel().create(stateHandle)
+    }
 
     private var _binding: FragmentSignInBinding? = null
     private val binding get() = _binding!!
 
-    private val signInExceptionHandleChain = SignInExceptionHandleChain()
+    @Inject
+    lateinit var authExceptionHandleChain: AuthExceptionHandleChain
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        appComponent().inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -85,11 +95,11 @@ class SignInFragment : Fragment() {
     }
 
     private fun handleException(exception: Throwable) {
-        signInExceptionHandleChain.handle(
-            exception,
-            binding.emailEditText,
-            binding.passwordEditText,
-            requireContext()
+        authExceptionHandleChain.handle(
+            exception = exception,
+            emailEditText = binding.emailEditText,
+            passwordEditText = binding.passwordEditText,
+            context = requireContext()
         )
     }
 
