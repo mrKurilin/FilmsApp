@@ -7,8 +7,9 @@ import com.mrkurilin.filmsapp.data.ResultWrapper
 import com.mrkurilin.filmsapp.domain.exceptions.EmptyFieldsException
 import com.mrkurilin.filmsapp.domain.exceptions.InvalidFieldsException
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class SignInUser(
+class SignInUser @Inject constructor(
     private val emailValidation: EmailValidation,
     private val passwordValidation: PasswordValidation,
 ) {

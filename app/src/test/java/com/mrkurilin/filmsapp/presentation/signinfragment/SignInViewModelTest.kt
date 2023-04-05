@@ -32,7 +32,7 @@ class SignInViewModelTest {
 
     @Before
     fun setup() {
-        signInViewModel = SignInViewModel(signInUser)
+        signInViewModel = SignInViewModel(signInUser = signInUser)
     }
 
     @Test
