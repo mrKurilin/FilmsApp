@@ -2,8 +2,6 @@ name: UI_tests_on_release
 
 on:
   pull_request:
-    branches:
-      - 'release'
 
 jobs:
   assemble_ui_test_artifacts:
