@@ -5,5 +5,7 @@ import com.mrkurilin.filmsapp.di.DaggerAppComponent
 
 class FilmsApp : Application() {
 
-    val appComponent = DaggerAppComponent.factory().create(context = this)
+    val appComponent by lazy {
+        DaggerAppComponent.factory().create(context = this)
+    }
 }

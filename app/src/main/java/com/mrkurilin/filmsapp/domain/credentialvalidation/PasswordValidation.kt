@@ -1,8 +1,9 @@
 package com.mrkurilin.filmsapp.domain.credentialvalidation
 
 import java.util.regex.Pattern
+import javax.inject.Inject
 
-class PasswordValidation {
+class PasswordValidation @Inject constructor() {
 
     private val passwordRegex = Pattern.compile(
         "^" +

@@ -1,13 +1,13 @@
-package com.mrkurilin.filmsapp.di
+package com.mrkurilin.filmsapp.presentation
 
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
 
-class Factory<T : ViewModel>(
+class ViewModelFactory<T : ViewModel>(
     savedStateRegistryOwner: SavedStateRegistryOwner,
-    private val create: (stateHandle: SavedStateHandle) -> T,
+    private val create: () -> T,
 ) : AbstractSavedStateViewModelFactory(savedStateRegistryOwner, null) {
 
     override fun <T : ViewModel> create(
@@ -15,6 +15,6 @@ class Factory<T : ViewModel>(
         modelClass: Class<T>,
         handle: SavedStateHandle,
     ): T {
-        return create.invoke(handle) as T
+        return create.invoke() as T
     }
 }

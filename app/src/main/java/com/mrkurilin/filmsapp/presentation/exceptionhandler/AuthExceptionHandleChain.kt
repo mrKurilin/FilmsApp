@@ -2,8 +2,9 @@ package com.mrkurilin.filmsapp.presentation.exceptionhandler
 
 import android.content.Context
 import android.widget.EditText
+import javax.inject.Inject
 
-class AuthExceptionHandleChain {
+class AuthExceptionHandleChain @Inject constructor() {
 
     fun handle(
         exception: Throwable,

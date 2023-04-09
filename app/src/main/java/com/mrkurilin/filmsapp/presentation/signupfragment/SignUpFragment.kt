@@ -10,17 +10,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.mrkurilin.filmsapp.databinding.FragmentSignUpBinding
+import com.mrkurilin.filmsapp.di.appComponent
+import com.mrkurilin.filmsapp.di.lazyViewModel
 import com.mrkurilin.filmsapp.presentation.exceptionhandler.AuthExceptionHandleChain
-import com.mrkurilin.filmsapp.util.extensions.appComponent
 import com.mrkurilin.filmsapp.util.extensions.hideKeyboard
-import com.mrkurilin.filmsapp.util.extensions.lazyViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SignUpFragment : Fragment() {
 
-    private val viewModel: SignUpViewModel by lazyViewModel { stateHandle ->
-        appComponent().signUpViewModel().create(stateHandle)
+    private val signUpViewModel: SignUpViewModel by lazyViewModel {
+        appComponent().signUpViewModel()
     }
 
     private var _binding: FragmentSignUpBinding? = null
@@ -63,7 +63,7 @@ class SignUpFragment : Fragment() {
         }
 
         lifecycleScope.launch {
-            viewModel.uiStateFlow.collect { signUpUiState ->
+            signUpViewModel.uiStateFlow.collect { signUpUiState ->
                 updateUI(signUpUiState)
             }
         }
@@ -73,7 +73,7 @@ class SignUpFragment : Fragment() {
         val email = binding.emailEditText.text.toString()
         val password = binding.passwordEditText.text.toString()
         val confirmPassword = binding.confirmPasswordEditText.text.toString()
-        viewModel.tryToSignUp(email, password, confirmPassword)
+        signUpViewModel.tryToSignUp(email, password, confirmPassword)
     }
 
     private fun updateUI(signUpUiState: SignUpUIState) {
