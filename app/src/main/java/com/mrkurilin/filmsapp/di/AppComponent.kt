@@ -8,7 +8,11 @@ import com.mrkurilin.filmsapp.presentation.signupfragment.SignUpViewModel
 import dagger.BindsInstance
 import dagger.Component
 
-@Component(modules = [AppModule::class])
+@Component(
+    modules = [
+        AppModule::class,
+    ]
+)
 interface AppComponent {
 
     @Component.Factory
@@ -17,9 +21,9 @@ interface AppComponent {
         fun create(@BindsInstance context: Context): AppComponent
     }
 
-    fun signInViewModel(): SignInViewModel.Factory
+    fun signInViewModel(): SignInViewModel
 
-    fun signUpViewModel(): SignUpViewModel.Factory
+    fun signUpViewModel(): SignUpViewModel
 
     fun inject(signInFragment: SignInFragment)
 

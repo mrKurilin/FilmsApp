@@ -1,8 +1,9 @@
 package com.mrkurilin.filmsapp.domain.credentialvalidation
 
 import java.util.regex.Pattern
+import javax.inject.Inject
 
-class EmailValidation {
+class EmailValidation @Inject constructor() {
 
     private val pattern = Pattern.compile(
         "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"

@@ -11,16 +11,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.mrkurilin.filmsapp.databinding.FragmentSignInBinding
 import com.mrkurilin.filmsapp.presentation.exceptionhandler.AuthExceptionHandleChain
-import com.mrkurilin.filmsapp.util.extensions.appComponent
+import com.mrkurilin.filmsapp.di.appComponent
 import com.mrkurilin.filmsapp.util.extensions.hideKeyboard
-import com.mrkurilin.filmsapp.util.extensions.lazyViewModel
+import com.mrkurilin.filmsapp.di.lazyViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SignInFragment : Fragment() {
 
-    private val viewModel: SignInViewModel by lazyViewModel { stateHandle ->
-        appComponent().signInViewModel().create(stateHandle)
+    private val signInViewModel: SignInViewModel by lazyViewModel {
+        appComponent().signInViewModel()
     }
 
     private var _binding: FragmentSignInBinding? = null
@@ -65,7 +65,7 @@ class SignInFragment : Fragment() {
         }
 
         lifecycleScope.launch {
-            viewModel.uiStateFlow.collect { signInUIState ->
+            signInViewModel.uiStateFlow.collect { signInUIState ->
                 updateUi(signInUIState)
             }
         }
@@ -104,7 +104,7 @@ class SignInFragment : Fragment() {
     }
 
     private fun tryToSignIn() {
-        viewModel.tryToSignIn(
+        signInViewModel.tryToSignIn(
             binding.emailEditText.text.toString(),
             binding.passwordEditText.text.toString()
         )
