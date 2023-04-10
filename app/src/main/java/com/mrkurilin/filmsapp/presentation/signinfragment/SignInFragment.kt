@@ -1,21 +1,23 @@
 package com.mrkurilin.filmsapp.presentation.signinfragment
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.auth.FirebaseAuthException
+import com.mrkurilin.filmsapp.R
 import com.mrkurilin.filmsapp.databinding.FragmentSignInBinding
-import com.mrkurilin.filmsapp.presentation.exceptionhandler.AuthExceptionHandleChain
 import com.mrkurilin.filmsapp.di.appComponent
-import com.mrkurilin.filmsapp.util.extensions.hideKeyboard
 import com.mrkurilin.filmsapp.di.lazyViewModel
+import com.mrkurilin.filmsapp.domain.credentialvalidation.SignInAuthFieldWithErrorMessage
+import com.mrkurilin.filmsapp.util.extensions.hideKeyboard
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class SignInFragment : Fragment() {
 
@@ -25,14 +27,6 @@ class SignInFragment : Fragment() {
 
     private var _binding: FragmentSignInBinding? = null
     private val binding get() = _binding!!
-
-    @Inject
-    lateinit var authExceptionHandleChain: AuthExceptionHandleChain
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        appComponent().inject(this)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -91,16 +85,35 @@ class SignInFragment : Fragment() {
                 binding.progressBar.visibility = View.VISIBLE
                 binding.signInGroup.visibility = View.INVISIBLE
             }
+            is SignInUIState.ValidationError -> {
+                binding.progressBar.visibility = View.INVISIBLE
+                binding.signInGroup.visibility = View.VISIBLE
+                signInUIState.signInAuthFieldsWithErrorMessage.forEach { field ->
+                    when (field) {
+                        is SignInAuthFieldWithErrorMessage.Email -> {
+                            binding.emailEditText.error = getString(field.messageRes)
+                        }
+                        is SignInAuthFieldWithErrorMessage.Password -> {
+                            binding.passwordEditText.error = getString(field.messageRes)
+                        }
+                    }
+                }
+            }
         }
     }
 
     private fun handleException(exception: Throwable) {
-        authExceptionHandleChain.handle(
-            exception = exception,
-            emailEditText = binding.emailEditText,
-            passwordEditText = binding.passwordEditText,
-            context = requireContext()
-        )
+        when (exception) {
+            is FirebaseNetworkException -> {
+                Toast.makeText(requireContext(), R.string.no_network, Toast.LENGTH_LONG).show()
+            }
+            is FirebaseAuthException -> {
+                Toast.makeText(context, R.string.wrong_email_or_password, Toast.LENGTH_LONG).show()
+            }
+            else -> {
+                Toast.makeText(context, R.string.unknown_error, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     private fun tryToSignIn() {

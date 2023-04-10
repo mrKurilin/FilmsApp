@@ -10,6 +10,6 @@ class EmailValidation @Inject constructor() {
     )
 
     fun isInvalidEmail(email: CharSequence): Boolean {
-        return email.isEmpty() || !pattern.matcher(email).matches()
+        return email.isBlank() || !pattern.matcher(email).matches()
     }
 }
