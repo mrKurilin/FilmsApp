@@ -1,31 +1,20 @@
 package com.mrkurilin.filmsapp.presentation
 
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.mrkurilin.filmsapp.domain.credentialvalidation.EmailValidation
-import com.mrkurilin.filmsapp.domain.credentialvalidation.PasswordValidation
-import com.mrkurilin.filmsapp.domain.credentialvalidation.SignInUser
-import com.mrkurilin.filmsapp.domain.credentialvalidation.SignUpUser
-import com.mrkurilin.filmsapp.presentation.signinfragment.SignInViewModel
-import com.mrkurilin.filmsapp.presentation.signupfragment.SignUpViewModel
+import androidx.lifecycle.AbstractSavedStateViewModelFactory
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.savedstate.SavedStateRegistryOwner
 
-class ViewModelFactory {
+class ViewModelFactory<T : ViewModel>(
+    savedStateRegistryOwner: SavedStateRegistryOwner,
+    private val create: () -> T,
+) : AbstractSavedStateViewModelFactory(savedStateRegistryOwner, null) {
 
-    companion object {
-
-        private val emailValidation = EmailValidation()
-        private val passwordValidation = PasswordValidation()
-
-        val signInViewModel = viewModelFactory {
-            initializer {
-                SignInViewModel(SignInUser(emailValidation, passwordValidation))
-            }
-        }
-
-        val signUpViewModel = viewModelFactory {
-            initializer {
-                SignUpViewModel(SignUpUser(emailValidation, passwordValidation))
-            }
-        }
+    override fun <T : ViewModel> create(
+        key: String,
+        modelClass: Class<T>,
+        handle: SavedStateHandle,
+    ): T {
+        return create.invoke() as T
     }
 }
