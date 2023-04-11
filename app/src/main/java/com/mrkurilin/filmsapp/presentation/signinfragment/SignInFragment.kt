@@ -72,7 +72,7 @@ class SignInFragment : Fragment() {
 
     private fun tryToSignIn() {
         signInViewModel.tryToSignIn(
-            email = binding.emailEditText.text.toString(),
+            email = binding.emailEditText.text.toString().trim(),
             password = binding.passwordEditText.text.toString(),
         )
     }
