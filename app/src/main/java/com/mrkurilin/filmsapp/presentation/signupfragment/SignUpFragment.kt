@@ -71,7 +71,7 @@ class SignUpFragment : Fragment() {
 
     private fun tryToSignUp() {
         signUpViewModel.tryToSignUp(
-            email = binding.emailEditText.text.toString(),
+            email = binding.emailEditText.text.toString().trim(),
             password = binding.passwordEditText.text.toString(),
             confirmPassword = binding.confirmPasswordEditText.text.toString(),
         )
