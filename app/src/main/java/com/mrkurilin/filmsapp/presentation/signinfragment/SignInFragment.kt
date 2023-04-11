@@ -65,16 +65,26 @@ class SignInFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun tryToSignIn() {
+        signInViewModel.tryToSignIn(
+            email = binding.emailEditText.text.toString(),
+            password = binding.passwordEditText.text.toString(),
+        )
+    }
+
     private fun updateUi(signInUIState: SignInUIState) {
         when (signInUIState) {
             is SignInUIState.Error -> {
                 handleException(signInUIState.exception)
-                binding.progressBar.visibility = View.INVISIBLE
-                binding.signInGroup.visibility = View.VISIBLE
+                showSignInGroupOnly()
             }
             SignInUIState.Initial -> {
-                binding.progressBar.visibility = View.INVISIBLE
-                binding.signInGroup.visibility = View.VISIBLE
+                showSignInGroupOnly()
             }
             SignInUIState.SignedIn -> {
                 val action = SignInFragmentDirections.actionSignInFragmentToMainFragment()
@@ -82,12 +92,11 @@ class SignInFragment : Fragment() {
             }
             SignInUIState.Loading -> {
                 hideKeyboard()
-                binding.progressBar.visibility = View.VISIBLE
                 binding.signInGroup.visibility = View.INVISIBLE
+                binding.progressBar.visibility = View.VISIBLE
             }
             is SignInUIState.ValidationError -> {
-                binding.progressBar.visibility = View.INVISIBLE
-                binding.signInGroup.visibility = View.VISIBLE
+                showSignInGroupOnly()
                 signInUIState.signInAuthFieldsWithErrorMessage.forEach { field ->
                     when (field) {
                         is SignInAuthFieldWithErrorMessage.Email -> {
@@ -116,15 +125,8 @@ class SignInFragment : Fragment() {
         }
     }
 
-    private fun tryToSignIn() {
-        signInViewModel.tryToSignIn(
-            binding.emailEditText.text.toString(),
-            binding.passwordEditText.text.toString()
-        )
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun showSignInGroupOnly() {
+        binding.progressBar.visibility = View.INVISIBLE
+        binding.signInGroup.visibility = View.VISIBLE
     }
 }
