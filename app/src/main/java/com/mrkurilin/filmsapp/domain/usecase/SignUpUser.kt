@@ -15,7 +15,7 @@ class SignUpUser @Inject constructor() {
     ): ResultWrapper<FirebaseUser> {
         return try {
             val user = Firebase.auth.createUserWithEmailAndPassword(email, password).await().user
-            user ?: throw IllegalStateException()
+            user ?: throw IllegalStateException("user is null")
             ResultWrapper.createSuccess(user)
         } catch (exception: Exception) {
             ResultWrapper.createFailure(exception)
