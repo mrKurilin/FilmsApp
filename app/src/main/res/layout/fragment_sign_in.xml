@@ -10,8 +10,12 @@
         android:id="@+id/sign_in_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="sign_up_text_view, sign_in_button,
-        email_edit_text, password_edit_text, not_registered_yet_question" />
+        app:constraint_referenced_ids="
+        sign_up_text_view,
+        sign_in_button,
+        email_edit_text,
+        password_edit_text,
+        not_registered_yet_question" />
 
     <EditText
         android:id="@+id/email_edit_text"

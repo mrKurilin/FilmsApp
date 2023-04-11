@@ -5,24 +5,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.auth.FirebaseAuthException
+import com.mrkurilin.filmsapp.R
 import com.mrkurilin.filmsapp.databinding.FragmentSignUpBinding
-import com.mrkurilin.filmsapp.presentation.ViewModelFactory
-import com.mrkurilin.filmsapp.presentation.exceptionhandler.SignUpExceptionHandleChain
+import com.mrkurilin.filmsapp.di.appComponent
+import com.mrkurilin.filmsapp.di.lazyViewModel
+import com.mrkurilin.filmsapp.domain.credentialvalidation.SignUpAuthFieldWithErrorMessage
+import com.mrkurilin.filmsapp.domain.exceptions.PasswordsMismatchException
 import com.mrkurilin.filmsapp.util.extensions.hideKeyboard
 import kotlinx.coroutines.launch
 
 class SignUpFragment : Fragment() {
 
-    private val viewModel: SignUpViewModel by viewModels { ViewModelFactory.signUpViewModel }
+    private val signUpViewModel: SignUpViewModel by lazyViewModel {
+        appComponent().signUpViewModel()
+    }
 
     private var _binding: FragmentSignUpBinding? = null
     private val binding get() = _binding!!
-
-    private val signUpExceptionHandleChain = SignUpExceptionHandleChain()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,24 +58,29 @@ class SignUpFragment : Fragment() {
         }
 
         lifecycleScope.launch {
-            viewModel.uiStateFlow.collect { signUpUiState ->
+            signUpViewModel.uiStateFlow.collect { signUpUiState ->
                 updateUI(signUpUiState)
             }
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun tryToSignUp() {
-        val email = binding.emailEditText.text.toString()
-        val password = binding.passwordEditText.text.toString()
-        val confirmPassword = binding.confirmPasswordEditText.text.toString()
-        viewModel.tryToSignUp(email, password, confirmPassword)
+        signUpViewModel.tryToSignUp(
+            email = binding.emailEditText.text.toString().trim(),
+            password = binding.passwordEditText.text.toString(),
+            confirmPassword = binding.confirmPasswordEditText.text.toString(),
+        )
     }
 
     private fun updateUI(signUpUiState: SignUpUIState) {
         when (signUpUiState) {
             is SignUpUIState.Initial -> {
-                binding.signUpGroup.visibility = View.VISIBLE
-                binding.progressBar.visibility = View.INVISIBLE
+                showSignUpGroupOnly()
             }
             is SignUpUIState.Loading -> {
                 hideKeyboard()
@@ -83,24 +93,47 @@ class SignUpFragment : Fragment() {
             }
             is SignUpUIState.Error -> {
                 handleException(signUpUiState.exception)
-                binding.progressBar.visibility = View.INVISIBLE
-                binding.signUpGroup.visibility = View.VISIBLE
+                showSignUpGroupOnly()
+            }
+            is SignUpUIState.ValidationError -> {
+                showSignUpGroupOnly()
+                signUpUiState.signUpAuthFieldsWithErrorMessage.forEach { field ->
+                    when (field) {
+                        is SignUpAuthFieldWithErrorMessage.ConfirmPassword -> {
+                            binding.confirmPasswordEditText.error = getString(field.messageRes)
+                        }
+                        is SignUpAuthFieldWithErrorMessage.Email -> {
+                            binding.emailEditText.error = getString(field.messageRes)
+                        }
+                        is SignUpAuthFieldWithErrorMessage.Password -> {
+                            binding.passwordEditText.error = getString(field.messageRes)
+                        }
+                    }
+
+                }
             }
         }
     }
 
-    private fun handleException(exception: Throwable) {
-        signUpExceptionHandleChain.handle(
-            exception,
-            binding.emailEditText,
-            binding.passwordEditText,
-            binding.confirmPasswordEditText,
-            requireContext()
-        )
+    private fun showSignUpGroupOnly() {
+        binding.progressBar.visibility = View.INVISIBLE
+        binding.signUpGroup.visibility = View.VISIBLE
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun handleException(exception: Throwable) {
+        when (exception) {
+            is PasswordsMismatchException -> {
+                binding.confirmPasswordEditText.error = getString(R.string.mismatch_password)
+            }
+            is FirebaseNetworkException -> {
+                Toast.makeText(requireContext(), R.string.no_network, Toast.LENGTH_LONG).show()
+            }
+            is FirebaseAuthException -> {
+                Toast.makeText(context, R.string.wrong_email_or_password, Toast.LENGTH_LONG).show()
+            }
+            else -> {
+                Toast.makeText(context, R.string.unknown_error, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 }
