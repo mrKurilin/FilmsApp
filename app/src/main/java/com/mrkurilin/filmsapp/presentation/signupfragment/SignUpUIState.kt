@@ -10,9 +10,9 @@ sealed class SignUpUIState {
 
     object SignedUp : SignUpUIState()
 
-    data class Error(val exception: Throwable) : SignUpUIState()
+    class Error(val exception: Throwable) : SignUpUIState()
 
-    data class ValidationError(
+    class ValidationError(
         val signUpAuthFieldsWithErrorMessage: List<SignUpAuthFieldWithErrorMessage>
     ) : SignUpUIState()
 }

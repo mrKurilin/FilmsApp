@@ -64,18 +64,23 @@ class SignUpFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun tryToSignUp() {
-        val email = binding.emailEditText.text.toString()
-        val password = binding.passwordEditText.text.toString()
-        val confirmPassword = binding.confirmPasswordEditText.text.toString()
-        signUpViewModel.tryToSignUp(email, password, confirmPassword)
+        signUpViewModel.tryToSignUp(
+            email = binding.emailEditText.text.toString(),
+            password = binding.passwordEditText.text.toString(),
+            confirmPassword = binding.confirmPasswordEditText.text.toString(),
+        )
     }
 
     private fun updateUI(signUpUiState: SignUpUIState) {
         when (signUpUiState) {
             is SignUpUIState.Initial -> {
-                binding.signUpGroup.visibility = View.VISIBLE
-                binding.progressBar.visibility = View.INVISIBLE
+                showSignUpGroupOnly()
             }
             is SignUpUIState.Loading -> {
                 hideKeyboard()
@@ -88,12 +93,10 @@ class SignUpFragment : Fragment() {
             }
             is SignUpUIState.Error -> {
                 handleException(signUpUiState.exception)
-                binding.progressBar.visibility = View.INVISIBLE
-                binding.signUpGroup.visibility = View.VISIBLE
+                showSignUpGroupOnly()
             }
             is SignUpUIState.ValidationError -> {
-                binding.progressBar.visibility = View.INVISIBLE
-                binding.signUpGroup.visibility = View.VISIBLE
+                showSignUpGroupOnly()
                 signUpUiState.signUpAuthFieldsWithErrorMessage.forEach { field ->
                     when (field) {
                         is SignUpAuthFieldWithErrorMessage.ConfirmPassword -> {
@@ -112,6 +115,11 @@ class SignUpFragment : Fragment() {
         }
     }
 
+    private fun showSignUpGroupOnly() {
+        binding.progressBar.visibility = View.INVISIBLE
+        binding.signUpGroup.visibility = View.VISIBLE
+    }
+
     private fun handleException(exception: Throwable) {
         when (exception) {
             is PasswordsMismatchException -> {
@@ -127,10 +135,5 @@ class SignUpFragment : Fragment() {
                 Toast.makeText(context, R.string.unknown_error, Toast.LENGTH_LONG).show()
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

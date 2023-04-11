@@ -2,7 +2,6 @@ package com.mrkurilin.filmsapp.presentation.signinfragment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mrkurilin.filmsapp.domain.exceptions.InvalidSignInCredentialException
 import com.mrkurilin.filmsapp.domain.usecase.SignInCredentialValidation
 import com.mrkurilin.filmsapp.domain.usecase.SignInUser
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,27 +14,26 @@ class SignInViewModel @Inject constructor(
     private val signInCredentialValidation: SignInCredentialValidation,
 ) : ViewModel() {
 
-    private val _uiStateFlow = MutableStateFlow<SignInUIState>(
-        SignInUIState.Initial
-    )
+    private val _uiStateFlow = MutableStateFlow<SignInUIState>(SignInUIState.Initial)
     val uiStateFlow = _uiStateFlow.asStateFlow()
 
     fun tryToSignIn(email: String, password: String) {
         _uiStateFlow.value = SignInUIState.Loading
 
-        try {
-            signInCredentialValidation.validate(
-                email = email,
-                password = password
-            )
-        } catch (exception: InvalidSignInCredentialException) {
-            _uiStateFlow.value = SignInUIState.ValidationError(exception.errors)
+        val errors = signInCredentialValidation.getValidationErrors(
+            email = email,
+            password = password,
+        )
+
+        if (errors.isNotEmpty()) {
+            _uiStateFlow.value = SignInUIState.ValidationError(errors)
+            return
         }
 
         viewModelScope.launch {
             val result = signInUser.signInWithEmailAndPassword(
                 email = email,
-                password = password
+                password = password,
             )
             val state = if (result.isSuccess) {
                 SignInUIState.SignedIn

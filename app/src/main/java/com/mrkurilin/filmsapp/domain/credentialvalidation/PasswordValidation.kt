@@ -17,7 +17,7 @@ class PasswordValidation @Inject constructor() {
     )
 
     fun isInvalidPassword(password: String): Boolean {
-        return !passwordRegex.matcher(password).matches()
+        return !isValidPassword(password)
     }
 
     fun isValidPassword(password: String): Boolean {
