@@ -1,6 +1,5 @@
-package com.mrkurilin.filmsapp.data
+package com.mrkurilin.filmsapp.domain.credentialvalidation
 
-import com.mrkurilin.filmsapp.domain.credentialvalidation.PasswordValidation
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
