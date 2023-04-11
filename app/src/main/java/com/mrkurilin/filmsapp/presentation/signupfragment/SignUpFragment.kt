@@ -16,7 +16,6 @@ import com.mrkurilin.filmsapp.databinding.FragmentSignUpBinding
 import com.mrkurilin.filmsapp.di.appComponent
 import com.mrkurilin.filmsapp.di.lazyViewModel
 import com.mrkurilin.filmsapp.domain.credentialvalidation.SignUpAuthFieldWithErrorMessage
-import com.mrkurilin.filmsapp.domain.exceptions.PasswordsMismatchException
 import com.mrkurilin.filmsapp.util.extensions.hideKeyboard
 import kotlinx.coroutines.launch
 
@@ -109,7 +108,6 @@ class SignUpFragment : Fragment() {
                             binding.passwordEditText.error = getString(field.messageRes)
                         }
                     }
-
                 }
             }
         }
@@ -122,9 +120,6 @@ class SignUpFragment : Fragment() {
 
     private fun handleException(exception: Throwable) {
         when (exception) {
-            is PasswordsMismatchException -> {
-                binding.confirmPasswordEditText.error = getString(R.string.mismatch_password)
-            }
             is FirebaseNetworkException -> {
                 Toast.makeText(requireContext(), R.string.no_network, Toast.LENGTH_LONG).show()
             }
