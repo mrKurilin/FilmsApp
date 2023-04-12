@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_sign_in">
         <action
             android:id="@+id/action_signInFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/topFilmsFragment" />
         <action
             android:id="@+id/action_signInFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
@@ -24,14 +24,14 @@
         tools:layout="@layout/fragment_sign_up">
         <action
             android:id="@+id/action_signUpFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/topFilmsFragment" />
         <action
             android:id="@+id/action_signUpFragment_to_signInFragment"
             app:destination="@id/signInFragment" />
     </fragment>
     <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.mrkurilin.filmsapp.presentation.mainfragment.MainFragment"
+        android:id="@+id/topFilmsFragment"
+        android:name="com.mrkurilin.filmsapp.presentation.topfilmsfragment.TopFilmsFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_top_films" />
 </navigation>
