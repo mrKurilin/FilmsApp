@@ -114,13 +114,25 @@ class SignInFragment : Fragment() {
     private fun handleException(exception: Throwable) {
         when (exception) {
             is FirebaseNetworkException -> {
-                Toast.makeText(requireContext(), R.string.no_network, Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(),
+                    R.string.no_network,
+                    Toast.LENGTH_LONG
+                ).show()
             }
             is FirebaseAuthException -> {
-                Toast.makeText(context, R.string.wrong_email_or_password, Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(),
+                    R.string.wrong_email_or_password,
+                    Toast.LENGTH_LONG
+                ).show()
             }
             else -> {
-                Toast.makeText(context, R.string.unknown_error, Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(),
+                    R.string.unknown_error,
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
