@@ -3,6 +3,7 @@ package com.mrkurilin.filmsapp.di
 import android.content.Context
 import com.mrkurilin.filmsapp.presentation.signinfragment.SignInViewModel
 import com.mrkurilin.filmsapp.presentation.signupfragment.SignUpViewModel
+import com.mrkurilin.filmsapp.presentation.topfilmsfragment.TopFilmsViewModel
 import dagger.BindsInstance
 import dagger.Component
 
@@ -25,4 +26,6 @@ interface AppComponent {
     fun signInViewModel(): SignInViewModel
 
     fun signUpViewModel(): SignUpViewModel
+
+    fun topFilmsViewModel(): TopFilmsViewModel
 }
