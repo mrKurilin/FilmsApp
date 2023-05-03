@@ -20,4 +20,7 @@
     <string name="mismatch_password">Пароли не совпадают</string>
     <string name="entry_favourite_button">Добавить или убрать из избранного</string>
     <string name="poster">Постер</string>
+    <string name="loading_error">Ошибка загрузки</string>
+    <string name="try_again">Попробовать снова</string>
+    <string name="error_image">error image</string>
 </resources>

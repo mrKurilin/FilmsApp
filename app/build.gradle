@@ -36,6 +36,10 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    testOptions {
+        animationsDisabled = true
+    }
 }
 
 dependencies {
@@ -47,6 +51,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
     implementation 'androidx.test.ext:junit-ktx:1.1.5'
+    implementation 'androidx.test.uiautomator:uiautomator-v18:2.2.0-alpha1'
     testImplementation 'junit:junit:4.13.2'
 
     implementation "androidx.fragment:fragment-ktx:$fragment_version"

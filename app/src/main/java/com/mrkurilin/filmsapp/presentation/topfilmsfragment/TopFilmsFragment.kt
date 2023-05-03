@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import com.mrkurilin.filmsapp.databinding.FragmentTopFilmsBinding
 import com.mrkurilin.filmsapp.di.appComponent
 import com.mrkurilin.filmsapp.di.lazyViewModel
@@ -40,8 +42,50 @@ class TopFilmsFragment : Fragment() {
         binding.films.adapter = adapter
 
         lifecycleScope.launch {
-            topFilmsViewModel.pagingFilms.collect { films ->
+            topFilmsViewModel.pagingFilmsFlow.collect { films ->
                 adapter.submitData(lifecycle, films)
+            }
+        }
+
+        lifecycleScope.launch {
+            topFilmsViewModel.uiStateFlow.collect { topFilmsUiState ->
+                updateUI(topFilmsUiState)
+            }
+        }
+
+        lifecycleScope.launch {
+            adapter.loadStateFlow.collect { combinedLoadStates ->
+                when (val loadState = combinedLoadStates.refresh) {
+                    is LoadState.Error -> {
+                        topFilmsViewModel.errorOccurred(loadState.error)
+                    }
+                    is LoadState.NotLoading -> {
+                        topFilmsViewModel.filmsLoaded()
+                    }
+                    LoadState.Loading -> {
+                        topFilmsViewModel.loadingState()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun updateUI(topFilmsUiState: TopFilmsUIState) {
+        when (topFilmsUiState) {
+            is TopFilmsUIState.Error -> {
+                binding.loadingErrorGroup.isVisible = true
+                binding.progressBar.isVisible = false
+                binding.films.isVisible = false
+            }
+            TopFilmsUIState.FilmsLoaded -> {
+                binding.progressBar.isVisible = false
+                binding.films.isVisible = true
+                binding.loadingErrorGroup.isVisible = false
+            }
+            TopFilmsUIState.Loading -> {
+                binding.progressBar.isVisible = true
+                binding.films.isVisible = false
+                binding.loadingErrorGroup.isVisible = false
             }
         }
     }
