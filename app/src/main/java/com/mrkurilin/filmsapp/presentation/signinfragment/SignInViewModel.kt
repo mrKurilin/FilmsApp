@@ -2,6 +2,8 @@ package com.mrkurilin.filmsapp.presentation.signinfragment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.mrkurilin.filmsapp.domain.usecase.SignInCredentialValidation
 import com.mrkurilin.filmsapp.domain.usecase.SignInUser
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +16,13 @@ class SignInViewModel @Inject constructor(
     private val signInCredentialValidation: SignInCredentialValidation,
 ) : ViewModel() {
 
-    private val _uiStateFlow = MutableStateFlow<SignInUIState>(SignInUIState.Initial)
+    private val _uiStateFlow = MutableStateFlow(
+        if (Firebase.auth.currentUser != null) {
+            SignInUIState.SignedIn
+        } else {
+            SignInUIState.Initial
+        }
+    )
     val uiStateFlow = _uiStateFlow.asStateFlow()
 
     fun tryToSignIn(email: String, password: String) {
