@@ -39,7 +39,12 @@ class TopFilmsFragment : Fragment() {
                 topFilmsViewModel.entryFavourite(film)
             }
         )
+
         binding.films.adapter = adapter
+
+        binding.tryAgainButton.setOnClickListener {
+            adapter.retry()
+        }
 
         lifecycleScope.launch {
             topFilmsViewModel.pagingFilmsFlow.collect { films ->
