@@ -29,7 +29,7 @@ class FilmViewHolder private constructor(
     fun bind(
         name: String?,
         genre: String,
-        year: String?,
+        year: Int?,
         country: String?,
         posterUrl: String,
         isFavourite: Boolean = false
@@ -44,7 +44,7 @@ class FilmViewHolder private constructor(
 
         binding.name.text = name
         binding.genre.text = genre
-        binding.year.text = year
+        binding.year.text = year.toString()
         binding.country.text = country
 
         val drawableRes = if (isFavourite) {
