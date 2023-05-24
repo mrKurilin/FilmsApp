@@ -1,8 +1,10 @@
 package com.mrkurilin.filmsapp.data.network
 
-import com.mrkurilin.filmsapp.domain.model.Films
+import com.mrkurilin.filmsapp.data.network.model.KinopoiskFilm
+import com.mrkurilin.filmsapp.data.network.model.KinopoiskTopFilms
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 private const val API_KEY = "e30ffed0-76ab-4dd6-b41f-4c9da2b2735b"
@@ -17,5 +19,12 @@ interface KinopoiskApiService {
         @Header("accept") accept: String = ACCEPT,
         @Query("type") type: String = TYPE,
         @Query("page") page: Int = 1,
-    ): Films
+    ): KinopoiskTopFilms
+
+    @GET("api/v2.2/films/{id}")
+    suspend fun getKinopoiskFilm(
+        @Header("X-API-KEY") apiKey: String = API_KEY,
+        @Header("accept") accept: String = ACCEPT,
+        @Path("id") id: Int,
+    ): KinopoiskFilm
 }

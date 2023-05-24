@@ -1,6 +1,7 @@
 package com.mrkurilin.filmsapp.di
 
 import android.content.Context
+import com.mrkurilin.filmsapp.presentation.filmdetailsfragment.FilmDetailsViewModel
 import com.mrkurilin.filmsapp.presentation.signinfragment.SignInViewModel
 import com.mrkurilin.filmsapp.presentation.signupfragment.SignUpViewModel
 import com.mrkurilin.filmsapp.presentation.topfilmsfragment.TopFilmsViewModel
@@ -28,4 +29,6 @@ interface AppComponent {
     fun signUpViewModel(): SignUpViewModel
 
     fun topFilmsViewModel(): TopFilmsViewModel
+
+    fun filmDetailsViewModel(): FilmDetailsViewModel
 }

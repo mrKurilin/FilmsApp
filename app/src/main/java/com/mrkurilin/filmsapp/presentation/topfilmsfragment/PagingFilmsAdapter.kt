@@ -6,17 +6,21 @@ import com.mrkurilin.filmsapp.domain.model.Film
 import com.mrkurilin.filmsapp.presentation.DiffUtilItemCallback
 
 class PagingFilmsAdapter(
-    private val onFavouritePressed: (Film) -> Unit
+    private val onFavouritePressed: (Film) -> Unit,
+    private val openFilmDetails: (Int) -> Unit,
 ) : PagingDataAdapter<Film, FilmViewHolder>(DiffUtilItemCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilmViewHolder {
         val holder = FilmViewHolder(parent)
 
         holder.binding.favourite.setOnClickListener {
-            val film = getItem(holder.absoluteAdapterPosition)
-            if (film != null) {
-                onFavouritePressed(film)
-            }
+            val film = getItem(holder.absoluteAdapterPosition)!!
+            onFavouritePressed(film)
+        }
+
+        holder.binding.root.setOnClickListener {
+            val film = getItem(holder.absoluteAdapterPosition)!!
+            openFilmDetails(film.filmId)
         }
 
         return holder
@@ -26,11 +30,11 @@ class PagingFilmsAdapter(
         val film = getItem(position) ?: return
 
         holder.bind(
-            name = film.nameRu,
-            genre = film.genres.joinToString(", "),
+            name = film.name,
+            genre = film.genres,
             year = film.year,
-            country = film.countries.joinToString(", "),
-            posterUrl = film.posterUrlPreview,
+            country = film.countries,
+            posterUrl = film.posterUrl,
         )
     }
 }

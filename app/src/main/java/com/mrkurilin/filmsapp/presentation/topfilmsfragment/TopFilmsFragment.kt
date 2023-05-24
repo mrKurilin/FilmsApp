@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.mrkurilin.filmsapp.databinding.FragmentTopFilmsBinding
 import com.mrkurilin.filmsapp.di.appComponent
@@ -37,6 +38,11 @@ class TopFilmsFragment : Fragment() {
         val adapter = PagingFilmsAdapter(
             onFavouritePressed = { film ->
                 topFilmsViewModel.entryFavourite(film)
+            },
+            openFilmDetails = { filmId ->
+                val action = TopFilmsFragmentDirections
+                    .actionTopFilmsFragmentToFilmDetailsFragment(filmId)
+                findNavController().navigate(action)
             }
         )
 
@@ -64,9 +70,11 @@ class TopFilmsFragment : Fragment() {
                     is LoadState.Error -> {
                         topFilmsViewModel.errorOccurred(loadState.error)
                     }
+
                     is LoadState.NotLoading -> {
                         topFilmsViewModel.filmsLoaded()
                     }
+
                     LoadState.Loading -> {
                         topFilmsViewModel.loadingState()
                     }
@@ -82,11 +90,13 @@ class TopFilmsFragment : Fragment() {
                 binding.progressBar.isVisible = false
                 binding.films.isVisible = false
             }
+
             TopFilmsUIState.FilmsLoaded -> {
                 binding.progressBar.isVisible = false
                 binding.films.isVisible = true
                 binding.loadingErrorGroup.isVisible = false
             }
+
             TopFilmsUIState.Loading -> {
                 binding.progressBar.isVisible = true
                 binding.films.isVisible = false

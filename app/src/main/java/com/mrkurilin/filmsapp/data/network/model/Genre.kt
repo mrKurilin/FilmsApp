@@ -1,4 +1,4 @@
-package com.mrkurilin.filmsapp.domain.model
+package com.mrkurilin.filmsapp.data.network.model
 
 data class Genre(
     val genre: String
