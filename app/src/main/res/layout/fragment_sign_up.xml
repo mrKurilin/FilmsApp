@@ -15,7 +15,7 @@
         sign_up_button,
         email_edit_text,
         password_edit_text,
-        already_registered_question,
+        already_registered_text_view,
         confirm_password_edit_text" />
 
     <EditText
@@ -62,13 +62,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/sign_up"
-        app:layout_constraintBottom_toTopOf="@id/already_registered_question"
+        app:layout_constraintBottom_toTopOf="@id/already_registered_text_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/confirm_password_edit_text" />
 
     <TextView
-        android:id="@+id/already_registered_question"
+        android:id="@+id/already_registered_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/already_registered_question"
@@ -90,7 +90,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/already_registered_question" />
+        app:layout_constraintTop_toBottomOf="@id/already_registered_text_view" />
 
     <ProgressBar
         android:id="@id/progress_bar"

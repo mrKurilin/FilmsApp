@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/topFilmsFragment"
-        android:name="com.mrkurilin.filmsapp.presentation.topfilmsfragment.TopFilmsFragment"
+        android:name="com.mrkurilin.filmsapp.presentation.top_films.topfilmsfragment.TopFilmsFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_top_films" >
         <action
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/filmDetailsFragment"
-        android:name="com.mrkurilin.filmsapp.presentation.filmdetailsfragment.FilmDetailsFragment"
+        android:name="com.mrkurilin.filmsapp.presentation.film_details.filmdetailsfragment.FilmDetailsFragment"
         android:label="FilmDetailsFragment"
         tools:layout="@layout/fragment_film_details">
         <action
