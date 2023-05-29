@@ -84,12 +84,10 @@ class SignInFragment : Fragment() {
                 handleException(signInUIState.exception)
                 showSignInGroupOnly()
             }
-
-            SignInUIState.Initial -> {
+            is SignInUIState.Initial -> {
                 showSignInGroupOnly()
             }
-
-            SignInUIState.SignedIn -> {
+            is SignInUIState.SignedIn -> {
                 findNavController().navigate(
                     R.id.topFilmsFragment, null,
                     NavOptions.Builder().setPopUpTo(
@@ -97,13 +95,11 @@ class SignInFragment : Fragment() {
                     ).build()
                 )
             }
-
-            SignInUIState.Loading -> {
+            is SignInUIState.Loading -> {
                 hideKeyboard()
                 binding.signInGroup.visibility = View.INVISIBLE
                 binding.progressBar.visibility = View.VISIBLE
             }
-
             is SignInUIState.ValidationError -> {
                 showSignInGroupOnly()
                 signInUIState.signInAuthFieldsWithErrorMessage.forEach { field ->
@@ -111,7 +107,6 @@ class SignInFragment : Fragment() {
                         is SignInAuthFieldWithErrorMessage.Email -> {
                             binding.emailEditText.error = getString(field.messageRes)
                         }
-
                         is SignInAuthFieldWithErrorMessage.Password -> {
                             binding.passwordEditText.error = getString(field.messageRes)
                         }
@@ -130,7 +125,6 @@ class SignInFragment : Fragment() {
                     Toast.LENGTH_LONG
                 ).show()
             }
-
             is FirebaseAuthException -> {
                 Toast.makeText(
                     requireContext(),
@@ -138,7 +132,6 @@ class SignInFragment : Fragment() {
                     Toast.LENGTH_LONG
                 ).show()
             }
-
             else -> {
                 Toast.makeText(
                     requireContext(),
