@@ -1,0 +1,20 @@
+package com.mrkurilin.filmsapp.presentation.top_films.topfilmsfragment
+
+import android.view.ViewGroup
+import androidx.paging.LoadState
+import androidx.paging.LoadStateAdapter
+
+class TopFilmsLoadStateAdapter(
+    private val retry: () -> Unit
+) : LoadStateAdapter<LoadStateViewHolder>() {
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        loadState: LoadState
+    ) = LoadStateViewHolder(parent, retry)
+
+    override fun onBindViewHolder(
+        holder: LoadStateViewHolder,
+        loadState: LoadState
+    ) = holder.bind(loadState)
+}

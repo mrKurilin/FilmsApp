@@ -1,6 +1,6 @@
 package com.mrkurilin.filmsapp.data.remote.model
 
-data class FilmRemote(
+data class FilmDetailsRemote(
     val completed: Boolean,
     val countries: List<CountryRemote>?,
     val coverUrl: String,

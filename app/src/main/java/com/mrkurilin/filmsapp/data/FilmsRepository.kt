@@ -36,12 +36,12 @@ class FilmsRepository @Inject constructor(
     }
 
     suspend fun getFilmById(filmId: Int): FilmDetails {
-        val filmRemote = filmsRemoteDataSource.getFilmRemoteById(filmId)
+        val filmRemote = filmsRemoteDataSource.getFilmDetailsRemoteById(filmId)
         val isWatched = filmsLocalDataSource.isFilmWatched(filmRemote.kinopoiskId)
         val isFavourite = filmsLocalDataSource.isFilmFavourite(filmRemote.kinopoiskId)
 
         return filmRemoteMapper.map(
-            filmRemote = filmRemote,
+            filmDetailsRemote = filmRemote,
             isFavourite = isFavourite,
             isWatched = isWatched
         )

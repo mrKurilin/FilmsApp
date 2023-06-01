@@ -19,6 +19,7 @@
     <string name="already_registered_question">Уже зарегистрированы?</string>
     <string name="mismatch_password">Пароли не совпадают</string>
     <string name="entry_favourite_button">Добавить или убрать из избранного</string>
+    <string name="entry_watched_button">Добавить или убрать из просмотренного</string>
     <string name="poster">Постер</string>
     <string name="loading_error">Ошибка загрузки</string>
     <string name="try_again">Попробовать снова</string>
@@ -31,5 +32,7 @@ Suspendisse convallis, urna tristique finibus consectetur, orci purus tincidunt 
     <string name="genres"><b>Жанры:</b> %1$s</string>
     <string name="countries"><b>Страны:</b> %1$s</string>
     <string name="year"><b>Год:</b> %1$d</string>
-    
+
+    <string name="unsuccessfully_to_load_top_films">Не удалось загрузить фильмы</string>
+
 </resources>

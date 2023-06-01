@@ -20,7 +20,7 @@ class TopFilmRemoteMapper @Inject constructor() {
 
         return TopFilm(
             filmId = topFilmRemote.filmId,
-            name = topFilmRemote.nameRu,
+            name = topFilmRemote.nameRu ?: topFilmRemote.nameEn ?: "",
             countries = countries,
             genres = genres,
             year = topFilmRemote.year,

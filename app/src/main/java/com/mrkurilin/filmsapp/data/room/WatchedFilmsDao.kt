@@ -4,7 +4,7 @@ import javax.inject.Inject
 
 class WatchedFilmsDao @Inject constructor(){
 
-    fun isFilmWatched(kinopoiskId: Int): Boolean {
+    fun isFilmWatched(filmId: Int): Boolean {
         return false
     }
 }
