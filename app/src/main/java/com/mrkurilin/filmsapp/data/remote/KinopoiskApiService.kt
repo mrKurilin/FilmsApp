@@ -1,6 +1,6 @@
 package com.mrkurilin.filmsapp.data.remote
 
-import com.mrkurilin.filmsapp.data.remote.model.FilmRemote
+import com.mrkurilin.filmsapp.data.remote.model.FilmDetailsRemote
 import com.mrkurilin.filmsapp.data.remote.model.TopFilmsRemote
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -22,9 +22,9 @@ interface KinopoiskApiService {
     ): TopFilmsRemote
 
     @GET("api/v2.2/films/{id}")
-    suspend fun getFilmRemote(
+    suspend fun getFilmDetailsRemote(
         @Header("X-API-KEY") apiKey: String = API_KEY,
         @Header("accept") accept: String = ACCEPT,
         @Path("id") id: Int,
-    ): FilmRemote
+    ): FilmDetailsRemote
 }

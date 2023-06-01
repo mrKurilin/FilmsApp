@@ -7,23 +7,23 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mrkurilin.filmsapp.R
-import com.mrkurilin.filmsapp.databinding.FilmViewHolderBinding
+import com.mrkurilin.filmsapp.databinding.TopFilmViewHolderBinding
 
 class TopFilmViewHolder private constructor(
-    val binding: FilmViewHolderBinding,
+    val binding: TopFilmViewHolderBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
-
-    constructor(parent: ViewGroup) : this(
-        FilmViewHolderBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
-    )
 
     private val posterRequestListener = PosterRequestListener(
         progressBar = binding.progressBar,
         imageView = binding.posterImageView,
+    )
+
+    constructor(parent: ViewGroup) : this(
+        binding = TopFilmViewHolderBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
     )
 
     fun bind(
@@ -32,7 +32,8 @@ class TopFilmViewHolder private constructor(
         year: Int?,
         country: String?,
         posterUrl: String,
-        isFavourite: Boolean = false
+        isFavourite: Boolean,
+        isWatched: Boolean,
     ) {
         binding.posterImageView.visibility = View.INVISIBLE
         binding.progressBar.visibility = View.VISIBLE
@@ -47,16 +48,29 @@ class TopFilmViewHolder private constructor(
         binding.yearTextView.text = year.toString()
         binding.countriesTextView.text = country
 
-        val drawableRes = if (isFavourite) {
+        val favouriteImageButtonDrawableRes = if (isFavourite) {
             R.drawable.filled_star
         } else {
             R.drawable.empty_star
         }
 
+        val watchedImageButtonDrawableRes = if (isWatched) {
+            R.drawable.seen
+        } else {
+            R.drawable.not_seen
+        }
+
         binding.favouriteImageButton.setImageDrawable(
             AppCompatResources.getDrawable(
                 itemView.context,
-                drawableRes
+                favouriteImageButtonDrawableRes
+            )
+        )
+
+        binding.watchedImageButton.setImageDrawable(
+            AppCompatResources.getDrawable(
+                itemView.context,
+                watchedImageButtonDrawableRes
             )
         )
     }

@@ -8,10 +8,11 @@ class FilmsLocalDataSource @Inject constructor(
 ) {
 
     fun isFilmFavourite(filmId: Int): Boolean {
-        return watchedFilmsDao.isFilmWatched(filmId)
+        return favouriteFilmsDao.isFilmFavourite(filmId)
     }
 
     fun isFilmWatched(filmId: Int): Boolean {
-        return favouriteFilmsDao.isFilmFavourite(filmId)
+        return watchedFilmsDao.isFilmWatched(filmId)
+
     }
 }

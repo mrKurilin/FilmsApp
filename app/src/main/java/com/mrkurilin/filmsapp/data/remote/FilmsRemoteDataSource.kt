@@ -3,7 +3,7 @@ package com.mrkurilin.filmsapp.data.remote
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.mrkurilin.filmsapp.data.remote.model.FilmRemote
+import com.mrkurilin.filmsapp.data.remote.model.FilmDetailsRemote
 import com.mrkurilin.filmsapp.data.remote.model.TopFilmRemote
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -14,8 +14,8 @@ class FilmsRemoteDataSource @Inject constructor(
     private val kinopoiskApi: KinopoiskApiService,
 ) {
 
-    suspend fun getFilmRemoteById(filmId: Int): FilmRemote {
-        return kinopoiskApi.getFilmRemote(id = filmId)
+    suspend fun getFilmDetailsRemoteById(filmId: Int): FilmDetailsRemote {
+        return kinopoiskApi.getFilmDetailsRemote(id = filmId)
     }
 
     fun getTopFilmsRemotePagingDataFlow(): Flow<PagingData<TopFilmRemote>> {

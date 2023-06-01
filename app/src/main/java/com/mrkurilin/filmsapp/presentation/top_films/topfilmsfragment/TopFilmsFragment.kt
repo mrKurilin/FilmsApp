@@ -12,6 +12,7 @@ import androidx.paging.LoadState
 import com.mrkurilin.filmsapp.databinding.FragmentTopFilmsBinding
 import com.mrkurilin.filmsapp.di.appComponent
 import com.mrkurilin.filmsapp.di.lazyViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class TopFilmsFragment : Fragment() {
@@ -45,10 +46,25 @@ class TopFilmsFragment : Fragment() {
             }
         )
 
-        binding.films.adapter = adapter
+        val adapterWithFooter = adapter.withLoadStateFooter(
+            footer = TopFilmsLoadStateAdapter(
+                retry = {
+                    lifecycleScope.launch {
+                        delay(500)
+                        adapter.retry()
+                    }
+                }
+            )
+        )
+
+        binding.filmsRecyclerView.adapter = adapterWithFooter
 
         binding.tryAgainButton.setOnClickListener {
-            adapter.retry()
+            lifecycleScope.launch {
+                topFilmsViewModel.onFilmsLoading()
+                delay(500)
+                adapter.retry()
+            }
         }
 
         lifecycleScope.launch {
@@ -85,17 +101,17 @@ class TopFilmsFragment : Fragment() {
         when (topFilmsUiState) {
             is TopFilmsUIState.Error -> {
                 binding.progressBar.isVisible = false
-                binding.films.isVisible = false
+                binding.filmsRecyclerView.isVisible = false
                 binding.loadingErrorGroup.isVisible = true
             }
             is TopFilmsUIState.FilmsLoaded -> {
                 binding.progressBar.isVisible = false
-                binding.films.isVisible = true
+                binding.filmsRecyclerView.isVisible = true
                 binding.loadingErrorGroup.isVisible = false
             }
             is TopFilmsUIState.Loading -> {
                 binding.progressBar.isVisible = true
-                binding.films.isVisible = false
+                binding.filmsRecyclerView.isVisible = false
                 binding.loadingErrorGroup.isVisible = false
             }
         }

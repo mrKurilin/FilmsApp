@@ -20,12 +20,11 @@ class TopFilmsViewModel @Inject constructor(
     private val _uiStateFlow = MutableStateFlow<TopFilmsUIState>(TopFilmsUIState.Loading)
     val uiStateFlow = _uiStateFlow.asStateFlow()
 
-    val pagingFilmsFlow = getFilmsPagingDataFlowUseCase.get()
-        .map { pagingData ->
-            pagingData.map { topFilm ->
-                topFilmUiMapper.map(topFilm)
-            }
-        }.cachedIn(viewModelScope)
+    val pagingFilmsFlow = getFilmsPagingDataFlowUseCase.get().map { pagingData ->
+        pagingData.map { topFilm ->
+            topFilmUiMapper.map(topFilm)
+        }
+    }.cachedIn(viewModelScope)
 
     fun entryFavourite(film: TopFilmUIModel) {
 

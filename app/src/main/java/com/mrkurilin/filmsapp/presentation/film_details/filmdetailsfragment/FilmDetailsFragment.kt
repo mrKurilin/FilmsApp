@@ -31,7 +31,6 @@ class FilmDetailsFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentFilmDetailsBinding.inflate(inflater, container, false)
-        filmDetailsViewModel.loadFilm(args.filmId)
         return fragmentFilmDetailsBinding.root
     }
 
@@ -41,6 +40,8 @@ class FilmDetailsFragment : Fragment() {
                 updateUI(uiState)
             }
         }
+
+        filmDetailsViewModel.loadFilm(args.filmId)
     }
 
     private fun updateUI(uiState: FilmDetailsUIState) {
@@ -48,7 +49,6 @@ class FilmDetailsFragment : Fragment() {
             is FilmDetailsUIState.Error -> {
 
             }
-
             is FilmDetailsUIState.FilmLoaded -> {
                 val film = uiState.filmDetailsUiModel
                 fragmentFilmDetailsBinding.countriesTextView.text = getString(
@@ -67,7 +67,6 @@ class FilmDetailsFragment : Fragment() {
                     .load(film.posterUrl)
                     .into(fragmentFilmDetailsBinding.posterImageView)
             }
-
             is FilmDetailsUIState.Loading -> {
 
             }

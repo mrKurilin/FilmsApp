@@ -2,13 +2,13 @@ package com.mrkurilin.filmsapp.presentation.top_films.topfilmsfragment
 
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
-import com.mrkurilin.filmsapp.presentation.DiffUtilItemCallback
+import com.mrkurilin.filmsapp.presentation.TopFilmUIModelDiffUtilItemCallback
 import com.mrkurilin.filmsapp.presentation.top_films.model.TopFilmUIModel
 
 class PagingFilmsAdapter(
     private val onFavouriteClicked: (TopFilmUIModel) -> Unit,
     private val onFilmClicked: (Int) -> Unit,
-) : PagingDataAdapter<TopFilmUIModel, TopFilmViewHolder>(DiffUtilItemCallback()) {
+) : PagingDataAdapter<TopFilmUIModel, TopFilmViewHolder>(TopFilmUIModelDiffUtilItemCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopFilmViewHolder {
         return TopFilmViewHolder(parent)
@@ -31,6 +31,8 @@ class PagingFilmsAdapter(
             year = film.year,
             country = film.countries,
             posterUrl = film.posterUrl,
+            isFavourite = film.isFavourite,
+            isWatched = film.isWatched,
         )
     }
 }
