@@ -34,5 +34,6 @@ Suspendisse convallis, urna tristique finibus consectetur, orci purus tincidunt 
     <string name="year"><b>Год:</b> %1$d</string>
 
     <string name="unsuccessfully_to_load_top_films">Не удалось загрузить фильмы</string>
+    <string name="film_details_loading_error">Ошибка при загрузке информации о фильме</string>
 
 </resources>
