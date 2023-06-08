@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.mrkurilin.filmsapp.domain.usecase.GetFilmsPagingDataFlowUseCase
-import com.mrkurilin.filmsapp.presentation.top_films.model.TopFilmUIModel
 import com.mrkurilin.filmsapp.presentation.top_films.model.TopFilmUiMapper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,7 +25,11 @@ class TopFilmsViewModel @Inject constructor(
         }
     }.cachedIn(viewModelScope)
 
-    fun entryFavourite(film: TopFilmUIModel) {
+    fun onFavouriteClicked(filmId: Int) {
+
+    }
+
+    fun onWatchedClicked(filmId: Int) {
 
     }
 

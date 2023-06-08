@@ -37,8 +37,11 @@ class TopFilmsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = PagingFilmsAdapter(
-            onFavouriteClicked = { film ->
-                topFilmsViewModel.entryFavourite(film)
+            onFavouriteClicked = { filmId ->
+                topFilmsViewModel.onFavouriteClicked(filmId)
+            },
+            onWatchedClicked = { filmId ->
+                topFilmsViewModel.onWatchedClicked(filmId)
             },
             onFilmClicked = { filmId ->
                 val action = TopFilmsFragmentDirections.actionTopFilmsFragmentToFilmDetailsFragment(filmId)
