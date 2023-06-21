@@ -1,4 +1,4 @@
-package com.mrkurilin.filmsapp.presentation.top_films.topfilmsfragment
+package com.mrkurilin.filmsapp.util
 
 import android.graphics.drawable.Drawable
 import android.view.View
@@ -11,7 +11,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.mrkurilin.filmsapp.R
 
-class PosterRequestListener(
+class GlideRequestListener(
     private val progressBar: ProgressBar,
     private val imageView: ImageView,
 ) : RequestListener<Drawable> {

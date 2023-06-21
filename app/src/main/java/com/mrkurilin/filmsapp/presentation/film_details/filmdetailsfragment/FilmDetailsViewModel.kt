@@ -27,7 +27,7 @@ class FilmDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             val filmDetails = getFilmDetailsByIdUseCase.get(filmId)
             currentFilmDetailsUiModel = filmDetailsUiMapper.map(filmDetails)
-            _uiStateFlow.value = FilmDetailsUIState.FilmLoaded(filmDetails.posterUrl)
+            _uiStateFlow.value = FilmDetailsUIState.FilmLoaded(currentFilmDetailsUiModel)
         }
     }
 
@@ -36,7 +36,6 @@ class FilmDetailsViewModel @Inject constructor(
         currentFilmDetailsUiModel = currentFilmDetailsUiModel.copy(
             isFavourite = !isCurrentFavourite
         )
-        _uiStateFlow.value = FilmDetailsUIState.FilmUpdatedAndReadyToShow(currentFilmDetailsUiModel)
         entryFavouriteFilmUseCase.entry(currentFilmDetailsUiModel.filmId)
     }
 
@@ -45,16 +44,11 @@ class FilmDetailsViewModel @Inject constructor(
         currentFilmDetailsUiModel = currentFilmDetailsUiModel.copy(
             isWatched = !isCurrentWatched
         )
-        _uiStateFlow.value = FilmDetailsUIState.FilmUpdatedAndReadyToShow(currentFilmDetailsUiModel)
         entryWatchedFilmUseCase.entry(currentFilmDetailsUiModel.filmId)
     }
 
     fun onErrorOccurred() {
         _uiStateFlow.value = FilmDetailsUIState.Error
-    }
-
-    fun onGlideResourceReady() {
-        _uiStateFlow.value = FilmDetailsUIState.FilmUpdatedAndReadyToShow(currentFilmDetailsUiModel)
     }
 
     fun onLoading() {

@@ -6,11 +6,7 @@ sealed class FilmDetailsUIState {
 
     object Loading : FilmDetailsUIState()
 
-    data class FilmUpdatedAndReadyToShow(
-        val filmDetailsUiModel: FilmDetailsUiModel
-    ) : FilmDetailsUIState()
-
-    data class FilmLoaded(val posterUrl: String) : FilmDetailsUIState()
+    data class FilmLoaded(val filmDetailsUiModel: FilmDetailsUiModel) : FilmDetailsUIState()
 
     object Error : FilmDetailsUIState()
 }
