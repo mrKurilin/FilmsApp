@@ -1,6 +1,5 @@
 package com.mrkurilin.filmsapp.presentation.film_details.filmdetailsfragment
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,15 +10,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.mrkurilin.filmsapp.R
 import com.mrkurilin.filmsapp.databinding.FragmentFilmDetailsBinding
 import com.mrkurilin.filmsapp.di.appComponent
 import com.mrkurilin.filmsapp.di.lazyViewModel
 import com.mrkurilin.filmsapp.presentation.film_details.model.FilmDetailsUiModel
+import com.mrkurilin.filmsapp.util.GlideRequestListener
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -80,13 +76,6 @@ class FilmDetailsFragment : Fragment() {
                 fragmentFilmDetailsBinding.filmDetailsGroup.isVisible = false
             }
 
-            is FilmDetailsUIState.FilmUpdatedAndReadyToShow -> {
-                fragmentFilmDetailsBinding.errorGroup.isVisible = false
-                fragmentFilmDetailsBinding.progressBar.isVisible = false
-                fragmentFilmDetailsBinding.filmDetailsGroup.isVisible = true
-                bind(uiState.filmDetailsUiModel)
-            }
-
             is FilmDetailsUIState.Loading -> {
                 fragmentFilmDetailsBinding.errorGroup.isVisible = false
                 fragmentFilmDetailsBinding.progressBar.isVisible = true
@@ -95,43 +84,24 @@ class FilmDetailsFragment : Fragment() {
 
             is FilmDetailsUIState.FilmLoaded -> {
                 fragmentFilmDetailsBinding.errorGroup.isVisible = false
-                fragmentFilmDetailsBinding.progressBar.isVisible = true
-                fragmentFilmDetailsBinding.filmDetailsGroup.isVisible = false
-                loadPoster(uiState.posterUrl)
+                fragmentFilmDetailsBinding.progressBar.isVisible = false
+                fragmentFilmDetailsBinding.filmDetailsGroup.isVisible = true
+                bind(uiState.filmDetailsUiModel)
             }
         }
     }
 
-    private fun loadPoster(posterUrl: String) {
-        Glide.with(fragmentFilmDetailsBinding.posterImageView)
-            .load(posterUrl)
-            .addListener(object : RequestListener<Drawable> {
-                override fun onLoadFailed(
-                    glideException: GlideException?,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    filmDetailsViewModel.onErrorOccurred()
-                    return false
-                }
-
-                override fun onResourceReady(
-                    resource: Drawable?,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    dataSource: DataSource?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    fragmentFilmDetailsBinding.posterImageView.setImageDrawable(resource)
-                    filmDetailsViewModel.onGlideResourceReady()
-                    return false
-                }
-            })
-            .into(fragmentFilmDetailsBinding.posterImageView)
-    }
-
     private fun bind(filmDetailsUiModel: FilmDetailsUiModel) {
+        Glide.with(fragmentFilmDetailsBinding.posterImageView)
+            .load(filmDetailsUiModel.posterUrl)
+            .addListener(
+                GlideRequestListener(
+                    progressBar = fragmentFilmDetailsBinding.posterLoadingProgressBar,
+                    imageView = fragmentFilmDetailsBinding.posterImageView,
+                )
+            )
+            .into(fragmentFilmDetailsBinding.posterImageView)
+
         fragmentFilmDetailsBinding.countriesTextView.text = getString(
             R.string.countries, filmDetailsUiModel.countries
         )

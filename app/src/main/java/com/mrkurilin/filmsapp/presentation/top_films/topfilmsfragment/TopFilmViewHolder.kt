@@ -8,15 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mrkurilin.filmsapp.R
 import com.mrkurilin.filmsapp.databinding.TopFilmViewHolderBinding
+import com.mrkurilin.filmsapp.util.GlideRequestListener
 
 class TopFilmViewHolder private constructor(
     val binding: TopFilmViewHolderBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
-
-    private val posterRequestListener = PosterRequestListener(
-        progressBar = binding.progressBar,
-        imageView = binding.posterImageView,
-    )
 
     constructor(parent: ViewGroup) : this(
         binding = TopFilmViewHolderBinding.inflate(
@@ -40,7 +36,12 @@ class TopFilmViewHolder private constructor(
 
         Glide.with(itemView)
             .load(posterUrl)
-            .listener(posterRequestListener)
+            .listener(
+                GlideRequestListener(
+                    progressBar = binding.progressBar,
+                    imageView = binding.posterImageView,
+                )
+            )
             .into(binding.posterImageView)
 
         binding.nameTextView.text = name
