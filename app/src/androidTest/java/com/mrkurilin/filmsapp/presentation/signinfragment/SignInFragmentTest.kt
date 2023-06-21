@@ -10,8 +10,10 @@ import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.espresso.matcher.ViewMatchers.hasErrorText
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.mrkurilin.filmsapp.R
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -102,7 +104,7 @@ class SignInFragmentTest {
     }
 
     @Test
-    fun testNavigationToSignInFragment() {
+    fun testNavigationToSignUpFragment() {
         val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
 
         scenario.onFragment { fragment ->
@@ -112,6 +114,7 @@ class SignInFragmentTest {
         }
 
         signUpTextView.perform(click())
+
         assertEquals(navController.currentDestination?.id, R.id.signUpFragment)
     }
 
@@ -129,7 +132,7 @@ class SignInFragmentTest {
         @BeforeClass
         @JvmStatic
         fun setUpClass() {
-            val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+            val appContext = getInstrumentation().targetContext
             emptyFieldError = appContext.getString(R.string.field_should_not_be_empty)
             invalidPasswordError = appContext.getString(R.string.invalid_password)
             invalidEmailError = appContext.getString(R.string.invalid_email)

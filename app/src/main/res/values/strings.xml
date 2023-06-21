@@ -19,5 +19,26 @@
     <string name="already_registered_question">Уже зарегистрированы?</string>
     <string name="mismatch_password">Пароли не совпадают</string>
     <string name="entry_favourite_button">Добавить или убрать из избранного</string>
+    <string name="entry_watched_button">Добавить или убрать из просмотренного</string>
     <string name="poster">Постер</string>
+    <string name="loading_error">Ошибка загрузки</string>
+    <string name="try_again">Попробовать снова</string>
+    <string name="error_image">error image</string>
+
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Pellentesque metus leo, porta sed ante id, fringilla mattis velit. Nulla eleifend sem et
+        mattis egestas. Suspendisse volutpat pulvinar nibh. Praesent eros mauris, facilisis sed
+        varius eu, mattis vel neque. Curabitur convallis facilisis nisi, at convallis magna.
+        Nullam nisl lectus, maximus sed vestibulum ac, fermentum eget turpis. Vestibulum
+        sollicitudin quis libero id semper. Aenean semper euismod quam quis luctus. Ut quis
+        turpis ut mi condimentum commodo. Proin justo ex, porttitor quis est sed, vulputate laoreet
+        lorem.</string>
+
+    <string name="genres"><b>Жанры:</b> %1$s</string>
+    <string name="countries"><b>Страны:</b> %1$s</string>
+    <string name="year"><b>Год:</b> %1$d</string>
+
+    <string name="unsuccessfully_to_load_top_films">Не удалось загрузить фильмы</string>
+    <string name="film_details_loading_error">Ошибка при загрузке информации о фильме</string>
+
 </resources>
