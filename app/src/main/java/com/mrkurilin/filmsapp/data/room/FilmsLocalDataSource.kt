@@ -13,6 +13,13 @@ class FilmsLocalDataSource @Inject constructor(
 
     fun isFilmWatched(filmId: Int): Boolean {
         return watchedFilmsDao.isFilmWatched(filmId)
+    }
 
+    fun entryWatchedFilm(filmId: Int) {
+        watchedFilmsDao.entryWatchedFilm(filmId)
+    }
+
+    fun entryFavouriteFilm(filmId: Int) {
+        favouriteFilmsDao.entryFavouriteFilm(filmId)
     }
 }

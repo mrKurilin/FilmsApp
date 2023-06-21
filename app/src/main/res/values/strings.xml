@@ -25,9 +25,14 @@
     <string name="try_again">Попробовать снова</string>
     <string name="error_image">error image</string>
 
-    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque metus leo, porta sed ante id, fringilla mattis velit. Nulla eleifend sem et mattis egestas. Suspendisse volutpat pulvinar nibh. Praesent eros mauris, facilisis sed varius eu, mattis vel neque. Curabitur convallis facilisis nisi, at convallis magna. Nullam nisl lectus, maximus sed vestibulum ac, fermentum eget turpis. Vestibulum sollicitudin quis libero id semper. Aenean semper euismod quam quis luctus. Ut quis turpis ut mi condimentum commodo. Proin justo ex, porttitor quis est sed, vulputate laoreet lorem. Fusce quis leo vitae augue lobortis porttitor quis id massa.
-
-Suspendisse convallis, urna tristique finibus consectetur, orci purus tincidunt felis, vel pulvinar nibh est in nisl. Pellentesque id arcu eget sem venenatis varius ac arcu. Sed ullamcorper enim nec augue dapibus consectetur. Etiam tellus ante, sollicitudin in odio at, maximus cursus nisl. Donec pretium elit sed mi dignissim venenatis. Vestibulum cursus dignissim elit, vitae sagittis ligula molestie et. Proin nibh ipsum, blandit faucibus neque non, mollis iaculis tellus. Aenean eget nisl ac urna congue elementum. Duis sollicitudin auctor elit, ac vulputate magna egestas vitae.</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Pellentesque metus leo, porta sed ante id, fringilla mattis velit. Nulla eleifend sem et
+        mattis egestas. Suspendisse volutpat pulvinar nibh. Praesent eros mauris, facilisis sed
+        varius eu, mattis vel neque. Curabitur convallis facilisis nisi, at convallis magna.
+        Nullam nisl lectus, maximus sed vestibulum ac, fermentum eget turpis. Vestibulum
+        sollicitudin quis libero id semper. Aenean semper euismod quam quis luctus. Ut quis
+        turpis ut mi condimentum commodo. Proin justo ex, porttitor quis est sed, vulputate laoreet
+        lorem.</string>
 
     <string name="genres"><b>Жанры:</b> %1$s</string>
     <string name="countries"><b>Страны:</b> %1$s</string>

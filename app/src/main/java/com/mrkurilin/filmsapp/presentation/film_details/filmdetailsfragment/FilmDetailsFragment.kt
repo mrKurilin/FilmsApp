@@ -25,11 +25,10 @@ import kotlinx.coroutines.launch
 
 class FilmDetailsFragment : Fragment() {
 
+    private val args: FilmDetailsFragmentArgs by navArgs()
     private val filmDetailsViewModel by lazyViewModel {
         appComponent().filmDetailsViewModel()
     }
-
-    private val args: FilmDetailsFragmentArgs by navArgs()
 
     private var _binding: FragmentFilmDetailsBinding? = null
     private val fragmentFilmDetailsBinding get() = _binding!!
@@ -65,11 +64,11 @@ class FilmDetailsFragment : Fragment() {
         }
 
         fragmentFilmDetailsBinding.favouriteImageButton.setOnClickListener {
-            filmDetailsViewModel.onFavouriteClicked(args.filmId)
+            filmDetailsViewModel.entryFavouriteFilm()
         }
 
         fragmentFilmDetailsBinding.watchedImageButton.setOnClickListener {
-            filmDetailsViewModel.onWatchedClicked(args.filmId)
+            filmDetailsViewModel.entryWatchedFilm()
         }
     }
 
@@ -81,10 +80,11 @@ class FilmDetailsFragment : Fragment() {
                 fragmentFilmDetailsBinding.filmDetailsGroup.isVisible = false
             }
 
-            is FilmDetailsUIState.FilmLoaded -> {
+            is FilmDetailsUIState.FilmUpdatedAndReadyToShow -> {
                 fragmentFilmDetailsBinding.errorGroup.isVisible = false
                 fragmentFilmDetailsBinding.progressBar.isVisible = false
                 fragmentFilmDetailsBinding.filmDetailsGroup.isVisible = true
+                bind(uiState.filmDetailsUiModel)
             }
 
             is FilmDetailsUIState.Loading -> {
@@ -92,12 +92,19 @@ class FilmDetailsFragment : Fragment() {
                 fragmentFilmDetailsBinding.progressBar.isVisible = true
                 fragmentFilmDetailsBinding.filmDetailsGroup.isVisible = false
             }
+
+            is FilmDetailsUIState.FilmLoaded -> {
+                fragmentFilmDetailsBinding.errorGroup.isVisible = false
+                fragmentFilmDetailsBinding.progressBar.isVisible = true
+                fragmentFilmDetailsBinding.filmDetailsGroup.isVisible = false
+                loadPoster(uiState.posterUrl)
+            }
         }
     }
 
-    private fun bind(filmDetailsUiModel: FilmDetailsUiModel) {
+    private fun loadPoster(posterUrl: String) {
         Glide.with(fragmentFilmDetailsBinding.posterImageView)
-            .load(filmDetailsUiModel.posterUrl)
+            .load(posterUrl)
             .addListener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(
                     glideException: GlideException?,
@@ -122,8 +129,9 @@ class FilmDetailsFragment : Fragment() {
                 }
             })
             .into(fragmentFilmDetailsBinding.posterImageView)
+    }
 
-
+    private fun bind(filmDetailsUiModel: FilmDetailsUiModel) {
         fragmentFilmDetailsBinding.countriesTextView.text = getString(
             R.string.countries, filmDetailsUiModel.countries
         )
@@ -170,8 +178,7 @@ class FilmDetailsFragment : Fragment() {
 
     private suspend fun tryToLoadFilm() {
         try {
-            val filmDetailsUiModel = filmDetailsViewModel.loadFilm(args.filmId)
-            bind(filmDetailsUiModel)
+            filmDetailsViewModel.loadFilm(args.filmId)
         } catch (exception: Exception) {
             filmDetailsViewModel.onErrorOccurred()
         }

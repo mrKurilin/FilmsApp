@@ -12,7 +12,7 @@ class FilmsRemotePagingSource @Inject constructor(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, TopFilmRemote> {
         return try {
             val currentPage = params.key ?: 1
-            val response = kinopoiskApiService.getTopFilms(page = currentPage)
+            val response = kinopoiskApiService.getTopFilmsRemote(page = currentPage)
             val films = response.films
 
             val previousKey = if (currentPage == 1) {

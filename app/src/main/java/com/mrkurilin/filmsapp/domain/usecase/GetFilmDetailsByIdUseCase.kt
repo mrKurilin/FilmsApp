@@ -9,6 +9,6 @@ class GetFilmDetailsByIdUseCase @Inject constructor(
 ) {
 
     suspend fun get(filmId: Int): FilmDetails {
-        return filmsRepository.getFilmById(filmId)
+        return filmsRepository.getFilmDetailsById(filmId)
     }
 }

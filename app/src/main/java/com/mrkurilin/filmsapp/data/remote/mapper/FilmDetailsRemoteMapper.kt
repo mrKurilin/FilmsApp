@@ -4,7 +4,7 @@ import com.mrkurilin.filmsapp.data.remote.model.FilmDetailsRemote
 import com.mrkurilin.filmsapp.domain.model.FilmDetails
 import javax.inject.Inject
 
-class FilmRemoteMapper @Inject constructor() {
+class FilmDetailsRemoteMapper @Inject constructor() {
 
     fun map(
         filmDetailsRemote: FilmDetailsRemote,

@@ -8,13 +8,11 @@ class TopFilmsLoadStateAdapter(
     private val retry: () -> Unit
 ) : LoadStateAdapter<LoadStateViewHolder>() {
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        loadState: LoadState
-    ) = LoadStateViewHolder(parent, retry)
+    override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): LoadStateViewHolder {
+        return LoadStateViewHolder(parent, retry)
+    }
 
-    override fun onBindViewHolder(
-        holder: LoadStateViewHolder,
-        loadState: LoadState
-    ) = holder.bind(loadState)
+    override fun onBindViewHolder(holder: LoadStateViewHolder, loadState: LoadState) {
+        holder.bind(loadState)
+    }
 }

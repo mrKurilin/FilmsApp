@@ -16,7 +16,9 @@ class LoadStateViewHolder(
     retry: () -> Unit
 ) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(
-        R.layout.load_state_view_holder, parent, false
+        R.layout.load_state_view_holder,
+        parent,
+        false
     )
 ) {
 

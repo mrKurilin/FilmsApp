@@ -74,4 +74,38 @@ class TopFilmViewHolder private constructor(
             )
         )
     }
+
+    fun changeFavouriteImageButtonDrawable() {
+        val favouriteDrawable = AppCompatResources.getDrawable(
+            itemView.context,
+            R.drawable.filled_star
+        )
+        val notFavouriteDrawable = AppCompatResources.getDrawable(
+            itemView.context,
+            R.drawable.empty_star
+        )
+
+        if (binding.favouriteImageButton.drawable == favouriteDrawable) {
+            binding.favouriteImageButton.setImageDrawable(notFavouriteDrawable)
+        } else {
+            binding.favouriteImageButton.setImageDrawable(favouriteDrawable)
+        }
+    }
+
+    fun changeWatchedImageButtonDrawable() {
+        val watchedDrawable = AppCompatResources.getDrawable(
+            itemView.context,
+            R.drawable.seen
+        )
+        val notWatchedDrawable = AppCompatResources.getDrawable(
+            itemView.context,
+            R.drawable.not_seen
+        )
+
+        if (binding.watchedImageButton.drawable == watchedDrawable) {
+            binding.watchedImageButton.setImageDrawable(notWatchedDrawable)
+        } else {
+            binding.watchedImageButton.setImageDrawable(watchedDrawable)
+        }
+    }
 }

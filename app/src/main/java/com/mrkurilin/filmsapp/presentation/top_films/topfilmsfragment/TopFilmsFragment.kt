@@ -36,12 +36,12 @@ class TopFilmsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = PagingFilmsAdapter(
-            onFavouriteClicked = { filmId ->
-                topFilmsViewModel.onFavouriteClicked(filmId)
+        val pagingFilmsAdapter = PagingFilmsAdapter(
+            entryFavouriteFilm = { filmId ->
+                topFilmsViewModel.entryFavouriteFilm(filmId)
             },
-            onWatchedClicked = { filmId ->
-                topFilmsViewModel.onWatchedClicked(filmId)
+            entryWatchedFilm = { filmId ->
+                topFilmsViewModel.entryWatchedFilm(filmId)
             },
             onFilmClicked = { filmId ->
                 val action = TopFilmsFragmentDirections.actionTopFilmsFragmentToFilmDetailsFragment(filmId)
@@ -49,12 +49,12 @@ class TopFilmsFragment : Fragment() {
             }
         )
 
-        val adapterWithFooter = adapter.withLoadStateFooter(
+        val adapterWithFooter = pagingFilmsAdapter.withLoadStateFooter(
             footer = TopFilmsLoadStateAdapter(
                 retry = {
                     lifecycleScope.launch {
                         delay(500)
-                        adapter.retry()
+                        pagingFilmsAdapter.retry()
                     }
                 }
             )
@@ -66,13 +66,13 @@ class TopFilmsFragment : Fragment() {
             lifecycleScope.launch {
                 topFilmsViewModel.onFilmsLoading()
                 delay(500)
-                adapter.retry()
+                pagingFilmsAdapter.retry()
             }
         }
 
         lifecycleScope.launch {
             topFilmsViewModel.pagingFilmsFlow.collect { filmsPagingData ->
-                adapter.submitData(lifecycle, filmsPagingData)
+                pagingFilmsAdapter.submitData(lifecycle, filmsPagingData)
             }
         }
 
@@ -83,7 +83,7 @@ class TopFilmsFragment : Fragment() {
         }
 
         lifecycleScope.launch {
-            adapter.loadStateFlow.collect { combinedLoadStates ->
+            pagingFilmsAdapter.loadStateFlow.collect { combinedLoadStates ->
                 val loadState = combinedLoadStates.refresh
                 when (loadState) {
                     is LoadState.Error -> {
@@ -116,6 +116,22 @@ class TopFilmsFragment : Fragment() {
                 binding.progressBar.isVisible = true
                 binding.filmsRecyclerView.isVisible = false
                 binding.loadingErrorGroup.isVisible = false
+            }
+
+            TopFilmsUIState.FilmAddedToFavourite -> {
+
+            }
+            TopFilmsUIState.FilmAddedToWatched -> {
+
+            }
+            TopFilmsUIState.FilmEntryError -> {
+
+            }
+            TopFilmsUIState.FilmRemovedFromFavourite -> {
+
+            }
+            TopFilmsUIState.FilmRemovedFromWatched -> {
+
             }
         }
     }
