@@ -14,7 +14,7 @@ private const val TYPE = "TOP_100_POPULAR_FILMS"
 interface KinopoiskApiService {
 
     @GET("api/v2.2/films/top")
-    suspend fun getTopFilms(
+    suspend fun getTopFilmsRemote(
         @Header("X-API-KEY") apiKey: String = API_KEY,
         @Header("accept") accept: String = ACCEPT,
         @Query("type") type: String = TYPE,

@@ -7,4 +7,8 @@ class FavouriteFilmsDao @Inject constructor() {
     fun isFilmFavourite(kinopoiskId: Int): Boolean {
         return false
     }
+
+    fun entryFavouriteFilm(filmId: Int) {
+
+    }
 }

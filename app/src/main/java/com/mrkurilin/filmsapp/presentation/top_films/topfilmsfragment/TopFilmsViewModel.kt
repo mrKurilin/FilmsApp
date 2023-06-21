@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.mrkurilin.filmsapp.domain.usecase.EntryFavouriteFilmUseCase
+import com.mrkurilin.filmsapp.domain.usecase.EntryWatchedFilmUseCase
 import com.mrkurilin.filmsapp.domain.usecase.GetFilmsPagingDataFlowUseCase
 import com.mrkurilin.filmsapp.presentation.top_films.model.TopFilmUiMapper
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,6 +15,8 @@ import javax.inject.Inject
 
 class TopFilmsViewModel @Inject constructor(
     private val topFilmUiMapper: TopFilmUiMapper,
+    private val entryFavouriteFilmUseCase: EntryFavouriteFilmUseCase,
+    private val entryWatchedFilmUseCase: EntryWatchedFilmUseCase,
     getFilmsPagingDataFlowUseCase: GetFilmsPagingDataFlowUseCase,
 ) : ViewModel() {
 
@@ -25,12 +29,12 @@ class TopFilmsViewModel @Inject constructor(
         }
     }.cachedIn(viewModelScope)
 
-    fun onFavouriteClicked(filmId: Int) {
-
+    fun entryFavouriteFilm(filmId: Int) {
+        entryFavouriteFilmUseCase.entry(filmId)
     }
 
-    fun onWatchedClicked(filmId: Int) {
-
+    fun entryWatchedFilm(filmId: Int) {
+        entryWatchedFilmUseCase.entry(filmId)
     }
 
     fun onFilmsLoadingError(throwable: Throwable) {
