@@ -8,6 +8,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuthException
@@ -87,8 +88,12 @@ class SignUpFragment : Fragment() {
                 binding.progressBar.visibility = View.VISIBLE
             }
             is SignUpUIState.SignedUp -> {
-                val action = SignUpFragmentDirections.actionSignUpFragmentToMainFragment()
-                findNavController().navigate(action)
+                findNavController().navigate(
+                    R.id.topFilmsFragment, null,
+                    NavOptions.Builder().setPopUpTo(
+                        findNavController().graph.startDestinationId, true
+                    ).build()
+                )
             }
             is SignUpUIState.Error -> {
                 handleException(signUpUiState.exception)
