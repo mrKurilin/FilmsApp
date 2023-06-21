@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/card"
+    android:padding="4dp">
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/name_text_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/poster_image_view"
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        android:contentDescription="@string/poster"
+        android:padding="4dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ImageContrastCheck" />
+
+    <TextView
+        android:id="@+id/name_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/countries_text_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/poster_image_view"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread"
+        tools:text="Аватар" />
+
+    <TextView
+        android:id="@+id/countries_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:lines="1"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/genres_text_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/poster_image_view"
+        app:layout_constraintTop_toBottomOf="@id/name_text_view"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="РОССИЯ" />
+
+    <TextView
+        android:id="@+id/genres_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/favourite_image_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/poster_image_view"
+        app:layout_constraintTop_toBottomOf="@id/countries_text_view"
+        tools:text="Боевик" />
+
+    <TextView
+        android:id="@+id/year_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/poster_image_view"
+        app:layout_constraintTop_toBottomOf="@id/genres_text_view"
+        tools:text="1993" />
+
+    <ImageButton
+        android:id="@+id/favourite_image_button"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/entry_favourite_button"
+        android:minWidth="48dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/empty_star"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageButton
+        android:id="@+id/watched_image_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/entry_watched_button"
+        android:scaleType="fitXY"
+        android:src="@drawable/not_seen"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/favourite_image_button" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
