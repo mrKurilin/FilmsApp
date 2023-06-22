@@ -2,39 +2,63 @@ package com.mrkurilin.filmsapp.presentation.top_films.topfilmsfragment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
+import androidx.paging.PagingData
 import androidx.paging.map
 import com.mrkurilin.filmsapp.domain.usecase.EntryFavouriteFilmUseCase
 import com.mrkurilin.filmsapp.domain.usecase.EntryWatchedFilmUseCase
 import com.mrkurilin.filmsapp.domain.usecase.GetFilmsPagingDataFlowUseCase
+import com.mrkurilin.filmsapp.presentation.top_films.model.TopFilmUIModel
 import com.mrkurilin.filmsapp.presentation.top_films.model.TopFilmUiMapper
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class TopFilmsViewModel @Inject constructor(
     private val topFilmUiMapper: TopFilmUiMapper,
-    private val entryFavouriteFilmUseCase: EntryFavouriteFilmUseCase,
-    private val entryWatchedFilmUseCase: EntryWatchedFilmUseCase,
+    private val toggleFavouriteFilmUseCase: EntryFavouriteFilmUseCase,
+    private val toggleWatchedFilmUseCase: EntryWatchedFilmUseCase,
     getFilmsPagingDataFlowUseCase: GetFilmsPagingDataFlowUseCase,
 ) : ViewModel() {
 
     private val _uiStateFlow = MutableStateFlow<TopFilmsUIState>(TopFilmsUIState.Loading)
     val uiStateFlow = _uiStateFlow.asStateFlow()
 
-    val pagingFilmsFlow = getFilmsPagingDataFlowUseCase.get().map { pagingData ->
-        pagingData.map { topFilm ->
-            topFilmUiMapper.map(topFilm)
-        }
-    }.cachedIn(viewModelScope)
+    private val _pagingFilmsFlow = MutableStateFlow<PagingData<TopFilmUIModel>?>(null)
+    val pagingFilmsFlow: StateFlow<PagingData<TopFilmUIModel>?> = _pagingFilmsFlow
 
-    fun entryFavouriteFilm(filmId: Int) {
-        entryFavouriteFilmUseCase.entry(filmId)
+    init {
+        viewModelScope.launch {
+            getFilmsPagingDataFlowUseCase.get(viewModelScope).map { pagingData ->
+                pagingData.map { topFilm ->
+                    topFilmUiMapper.toTopFilmUIModel(topFilm)
+                }
+            }.collectLatest { pagingData ->
+                _pagingFilmsFlow.update {
+                    pagingData
+                }
+            }
+        }
     }
 
-    fun entryWatchedFilm(filmId: Int) {
-        entryWatchedFilmUseCase.entry(filmId)
+    fun toggleFavouriteFilm(filmId: Int?) {
+        if (filmId == null) {
+            // TODO: SetErrorState + show toast
+        } else {
+            toggleFavouriteFilmUseCase.toggle(filmId)
+        }
+    }
+
+    fun toggleWatchedFilm(filmId: Int?) {
+        if (filmId == null) {
+            // TODO: SetErrorState + show toast
+        } else {
+            toggleWatchedFilmUseCase.toggle(filmId)
+        }
     }
 
     fun onFilmsLoadingError(throwable: Throwable) {

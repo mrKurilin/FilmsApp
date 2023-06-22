@@ -1,14 +1,18 @@
 package com.mrkurilin.filmsapp.data
 
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import androidx.paging.map
 import com.mrkurilin.filmsapp.data.remote.FilmsRemoteDataSource
 import com.mrkurilin.filmsapp.data.remote.mapper.FilmDetailsRemoteMapper
 import com.mrkurilin.filmsapp.data.remote.mapper.TopFilmRemoteMapper
 import com.mrkurilin.filmsapp.data.room.FilmsLocalDataSource
+import com.mrkurilin.filmsapp.data.room.model.FilmStatusLocal
 import com.mrkurilin.filmsapp.domain.model.FilmDetails
 import com.mrkurilin.filmsapp.domain.model.TopFilm
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -19,39 +23,66 @@ class FilmsRepository @Inject constructor(
     private val filmDetailsRemoteMapper: FilmDetailsRemoteMapper,
 ) {
 
-    fun getTopFilmsPagingDataFlow(): Flow<PagingData<TopFilm>> {
-        val topFilmsRemotePagingDataFlow = filmsRemoteDataSource.getTopFilmsRemotePagingDataFlow()
-
-        return topFilmsRemotePagingDataFlow.map { topFilmRemotePagingData ->
-            topFilmRemotePagingData.map { topFilmRemote ->
-                val isWatched = filmsLocalDataSource.isFilmWatched(topFilmRemote.filmId)
-                val isFavourite = filmsLocalDataSource.isFilmFavourite(topFilmRemote.filmId)
-                topFilmRemoteMapper.map(
-                    topFilmRemote = topFilmRemote,
-                    isFavourite = isFavourite,
-                    isWatched = isWatched
-                )
+    fun getTopFilmsPagingDataFlow(coroutineScope: CoroutineScope): Flow<PagingData<TopFilm>> {
+        return filmsRemoteDataSource.getTopFilmsRemotePagingDataFlow().cachedIn(coroutineScope)
+            .combine(
+                filmsLocalDataSource.getFilmsStatusLocalListFlow()
+            ) { f, s ->
+                f.map { topFilmRemote ->
+                    val filmStatusLocal = s.firstOrNull { it.filmId == topFilmRemote.filmId }
+                    topFilmRemoteMapper.map(
+                        topFilmRemote,
+                        isFavourite = filmStatusLocal?.isFavourite ?: false,
+                        isWatched = filmStatusLocal?.isFavourite ?: false,
+                    )
+                }
             }
+    }
+
+    suspend fun getFilmDetailsFlowById(filmId: Int): Flow<FilmDetails> {
+        val filmStatusLocal = filmsLocalDataSource.getFilmStatusLocalFlow(filmId)
+        return filmStatusLocal.map { filmLocalStatus ->
+            filmDetailsRemoteMapper.map(
+                filmDetailsRemote = filmsRemoteDataSource.getFilmDetailsRemoteById(filmId),
+                isWatched = filmLocalStatus?.isWatched ?: false,
+                isFavourite = filmLocalStatus?.isFavourite ?: false,
+            )
         }
     }
 
-    suspend fun getFilmDetailsById(filmId: Int): FilmDetails {
-        val filmDetailsRemote = filmsRemoteDataSource.getFilmDetailsRemoteById(filmId)
-        val isWatched = filmsLocalDataSource.isFilmWatched(filmDetailsRemote.kinopoiskId)
-        val isFavourite = filmsLocalDataSource.isFilmFavourite(filmDetailsRemote.kinopoiskId)
-
-        return filmDetailsRemoteMapper.map(
-            filmDetailsRemote = filmDetailsRemote,
-            isFavourite = isFavourite,
-            isWatched = isWatched
-        )
+    fun toggleFavouriteFilm(filmId: Int) {
+        val filmStatusLocal = filmsLocalDataSource.getFilmStatusLocal(filmId)
+        if (filmStatusLocal == null) {
+            filmsLocalDataSource.insertFilmStatusLocal(
+                FilmStatusLocal(
+                    filmId = filmId,
+                    isFavourite = true,
+                )
+            )
+        } else {
+            filmsLocalDataSource.updateFilmStatusLocal(
+                filmStatusLocal.copy(isFavourite = !filmStatusLocal.isFavourite)
+            )
+        }
     }
 
-    fun entryWatchedFilm(filmId: Int) {
-        filmsLocalDataSource.entryWatchedFilm(filmId)
+    fun toggleWatchedFilm(filmId: Int) {
+        val filmStatusLocal = filmsLocalDataSource.getFilmStatusLocal(filmId)
+        if (filmStatusLocal == null) {
+            filmsLocalDataSource.insertFilmStatusLocal(
+                FilmStatusLocal(
+                    filmId = filmId,
+                    isWatched = true,
+                )
+            )
+        } else {
+            filmsLocalDataSource.updateFilmStatusLocal(
+                filmStatusLocal.copy(isWatched = !filmStatusLocal.isWatched)
+            )
+        }
     }
 
-    fun entryFavouriteFilm(filmId: Int) {
-        filmsLocalDataSource.entryFavouriteFilm(filmId)
+    fun getFavFilms(): Flow<List<Int>> {
+        return filmsLocalDataSource.getFavouriteFilmIdsListFlow()
     }
 }
