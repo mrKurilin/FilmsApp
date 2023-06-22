@@ -7,7 +7,7 @@ class EntryWatchedFilmUseCase @Inject constructor(
     private val filmsRepository: FilmsRepository
 ) {
 
-    fun entry(filmId: Int) {
-        filmsRepository.entryWatchedFilm(filmId)
+    fun toggle(filmId: Int) {
+        filmsRepository.toggleWatchedFilm(filmId)
     }
 }
