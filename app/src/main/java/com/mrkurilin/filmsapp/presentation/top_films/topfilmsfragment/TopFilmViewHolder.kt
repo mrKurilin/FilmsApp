@@ -3,10 +3,8 @@ package com.mrkurilin.filmsapp.presentation.top_films.topfilmsfragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.mrkurilin.filmsapp.R
 import com.mrkurilin.filmsapp.databinding.TopFilmViewHolderBinding
 import com.mrkurilin.filmsapp.util.GlideRequestListener
 
@@ -48,65 +46,7 @@ class TopFilmViewHolder private constructor(
         binding.genresTextView.text = genre
         binding.yearTextView.text = year.toString()
         binding.countriesTextView.text = country
-
-        val favouriteImageButtonDrawableRes = if (isFavourite) {
-            R.drawable.filled_star
-        } else {
-            R.drawable.empty_star
-        }
-
-        val watchedImageButtonDrawableRes = if (isWatched) {
-            R.drawable.seen
-        } else {
-            R.drawable.not_seen
-        }
-
-        binding.favouriteImageButton.setImageDrawable(
-            AppCompatResources.getDrawable(
-                itemView.context,
-                favouriteImageButtonDrawableRes
-            )
-        )
-
-        binding.watchedImageButton.setImageDrawable(
-            AppCompatResources.getDrawable(
-                itemView.context,
-                watchedImageButtonDrawableRes
-            )
-        )
-    }
-
-    fun changeFavouriteImageButtonDrawable() {
-        val favouriteDrawable = AppCompatResources.getDrawable(
-            itemView.context,
-            R.drawable.filled_star
-        )
-        val notFavouriteDrawable = AppCompatResources.getDrawable(
-            itemView.context,
-            R.drawable.empty_star
-        )
-
-        if (binding.favouriteImageButton.drawable == favouriteDrawable) {
-            binding.favouriteImageButton.setImageDrawable(notFavouriteDrawable)
-        } else {
-            binding.favouriteImageButton.setImageDrawable(favouriteDrawable)
-        }
-    }
-
-    fun changeWatchedImageButtonDrawable() {
-        val watchedDrawable = AppCompatResources.getDrawable(
-            itemView.context,
-            R.drawable.seen
-        )
-        val notWatchedDrawable = AppCompatResources.getDrawable(
-            itemView.context,
-            R.drawable.not_seen
-        )
-
-        if (binding.watchedImageButton.drawable == watchedDrawable) {
-            binding.watchedImageButton.setImageDrawable(notWatchedDrawable)
-        } else {
-            binding.watchedImageButton.setImageDrawable(watchedDrawable)
-        }
+        binding.favouriteCheckBox.isChecked = isFavourite
+        binding.watchedCheckBox.isChecked = isWatched
     }
 }

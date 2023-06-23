@@ -33,7 +33,7 @@
         android:id="@+id/topFilmsFragment"
         android:name="com.mrkurilin.filmsapp.presentation.top_films.topfilmsfragment.TopFilmsFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_top_films" >
+        tools:layout="@layout/fragment_top_films">
         <action
             android:id="@+id/action_topFilmsFragment_to_filmDetailsFragment"
             app:destination="@id/filmDetailsFragment" />

@@ -6,8 +6,8 @@ import com.mrkurilin.filmsapp.presentation.TopFilmUIModelDiffUtilItemCallback
 import com.mrkurilin.filmsapp.presentation.top_films.model.TopFilmUIModel
 
 class PagingFilmsAdapter(
-    private val entryFavouriteFilm: (Int) -> Unit,
-    private val entryWatchedFilm: (Int) -> Unit,
+    private val toggleFavouriteFilm: (Int?) -> Unit,
+    private val toggleWatchedFilm: (Int?) -> Unit,
     private val onFilmClicked: (Int) -> Unit,
 ) : PagingDataAdapter<TopFilmUIModel, TopFilmViewHolder>(TopFilmUIModelDiffUtilItemCallback()) {
 
@@ -18,14 +18,12 @@ class PagingFilmsAdapter(
     override fun onBindViewHolder(holder: TopFilmViewHolder, position: Int) {
         val film = getItem(position) ?: return
 
-        holder.binding.favouriteImageButton.setOnClickListener {
-            entryFavouriteFilm(film.filmId)
-            holder.changeFavouriteImageButtonDrawable()
+        holder.binding.favouriteCheckBox.setOnClickListener {
+            toggleFavouriteFilm(getItem(position)?.filmId)
         }
 
-        holder.binding.watchedImageButton.setOnClickListener {
-            entryWatchedFilm(film.filmId)
-            holder.changeWatchedImageButtonDrawable()
+        holder.binding.watchedCheckBox.setOnClickListener {
+            toggleWatchedFilm(getItem(position)?.filmId)
         }
 
         holder.binding.root.setOnClickListener {

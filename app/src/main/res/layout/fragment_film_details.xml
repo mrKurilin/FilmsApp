@@ -23,8 +23,8 @@
             film_year_text_view,
             countries_text_view,
             genres_text_view,
-            favourite_image_button,
-            watched_image_button,
+            favourite_check_box,
+            watched_check_box,
             description_text_view" />
 
         <androidx.constraintlayout.widget.Group
@@ -96,26 +96,25 @@
             app:layout_constraintTop_toBottomOf="@id/poster_image_view"
             tools:text="Название фильма" />
 
-        <ImageButton
-            android:id="@+id/favourite_image_button"
+        <CheckBox
+            android:id="@+id/favourite_check_box"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:buttonTint="#0000ff"
             android:background="@android:color/transparent"
+            android:button="@drawable/favourite_checkbox_drawable"
             android:contentDescription="@string/entry_favourite_button"
-            android:scaleType="fitXY"
-            android:src="@drawable/empty_star"
-            app:layout_constraintEnd_toStartOf="@id/watched_image_button"
+            app:layout_constraintEnd_toStartOf="@id/watched_check_box"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintTop_toBottomOf="@+id/genres_text_view" />
 
-        <ImageButton
-            android:id="@+id/watched_image_button"
+        <CheckBox
+            android:id="@+id/watched_check_box"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@android:color/transparent"
+            android:buttonTint="#0000ff"
+            android:button="@drawable/watched_checkbox_drawable"
             android:contentDescription="@string/entry_watched_button"
-            android:scaleType="fitXY"
-            android:src="@drawable/not_seen"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/genres_text_view" />
 
@@ -152,7 +151,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            app:layout_constraintTop_toBottomOf="@+id/favourite_image_button"
+            app:layout_constraintTop_toBottomOf="@+id/favourite_check_box"
             tools:text="@string/lorem_ipsum" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,6 @@
 package com.mrkurilin.filmsapp.domain.model
 
-class TopFilm(
+data class TopFilm(
     val filmId: Int,
     val name: String,
     val countries: List<String>,
@@ -8,5 +8,5 @@ class TopFilm(
     val year: Int,
     val isFavourite: Boolean,
     val isWatched: Boolean,
-    val posterUrl: String
+    val posterUrl: String,
 )
