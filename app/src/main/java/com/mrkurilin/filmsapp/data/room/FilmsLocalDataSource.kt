@@ -12,14 +12,6 @@ class FilmsLocalDataSource @Inject constructor(
         return filmLocalDao.getFilmsStatusLocalListFlow()
     }
 
-    fun toggleWatchedFilmLocal(filmId: Int) {
-        filmLocalDao.toggleWatchedFilmLocal(filmId)
-    }
-
-    fun toggleFavouriteFilmLocal(filmId: Int) {
-        filmLocalDao.toggleFavouriteFilmLocal(filmId)
-    }
-
     fun getFilmStatusLocal(filmId: Int): FilmStatusLocal? {
         return filmLocalDao.getFilmStatusLocal(filmId)
     }
@@ -34,13 +26,5 @@ class FilmsLocalDataSource @Inject constructor(
 
     fun getFilmStatusLocalFlow(filmId: Int): Flow<FilmStatusLocal?> {
         return filmLocalDao.getFilmStatusLocalFlow(filmId)
-    }
-
-    fun getWatchedFilmIdsListFlow(): Flow<List<Int>> {
-        return filmLocalDao.getWatchedFilmIdsListFlow()
-    }
-
-    fun getFavouriteFilmIdsListFlow(): Flow<List<Int>> {
-        return filmLocalDao.getFavouriteFilmIdsListFlow()
     }
 }

@@ -74,9 +74,7 @@ class TopFilmsFragment : Fragment() {
 
         lifecycleScope.launch {
             topFilmsViewModel.pagingFilmsFlow.collectLatest { filmsPagingData ->
-                if (filmsPagingData != null) {
-                    pagingFilmsAdapter.submitData(filmsPagingData)
-                }
+                pagingFilmsAdapter.submitData(filmsPagingData)
             }
         }
 
@@ -124,26 +122,6 @@ class TopFilmsFragment : Fragment() {
                 binding.progressBar.isVisible = true
                 binding.filmsRecyclerView.isVisible = false
                 binding.loadingErrorGroup.isVisible = false
-            }
-
-            TopFilmsUIState.FilmAddedToFavourite -> {
-
-            }
-
-            TopFilmsUIState.FilmAddedToWatched -> {
-
-            }
-
-            TopFilmsUIState.FilmEntryError -> {
-
-            }
-
-            TopFilmsUIState.FilmRemovedFromFavourite -> {
-
-            }
-
-            TopFilmsUIState.FilmRemovedFromWatched -> {
-
             }
         }
     }

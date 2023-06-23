@@ -27,13 +27,15 @@ class FilmsRepository @Inject constructor(
         return filmsRemoteDataSource.getTopFilmsRemotePagingDataFlow().cachedIn(coroutineScope)
             .combine(
                 filmsLocalDataSource.getFilmsStatusLocalListFlow()
-            ) { f, s ->
-                f.map { topFilmRemote ->
-                    val filmStatusLocal = s.firstOrNull { it.filmId == topFilmRemote.filmId }
+            ) { topFilmRemotePagingData, filmStatusLocalList ->
+                topFilmRemotePagingData.map { topFilmRemote ->
+                    val filmStatusLocal = filmStatusLocalList.firstOrNull {
+                        it.filmId == topFilmRemote.filmId
+                    }
                     topFilmRemoteMapper.map(
                         topFilmRemote,
                         isFavourite = filmStatusLocal?.isFavourite ?: false,
-                        isWatched = filmStatusLocal?.isFavourite ?: false,
+                        isWatched = filmStatusLocal?.isWatched ?: false,
                     )
                 }
             }
@@ -80,9 +82,5 @@ class FilmsRepository @Inject constructor(
                 filmStatusLocal.copy(isWatched = !filmStatusLocal.isWatched)
             )
         }
-    }
-
-    fun getFavFilms(): Flow<List<Int>> {
-        return filmsLocalDataSource.getFavouriteFilmIdsListFlow()
     }
 }
