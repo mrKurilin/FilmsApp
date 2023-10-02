@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context=".presentation.signupfragment.SignUpFragment">
 
     <androidx.constraintlayout.widget.Group
@@ -20,7 +21,7 @@
 
     <EditText
         android:id="@id/email_edit_text"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/email"
         android:importantForAutofill="no"
@@ -36,7 +37,7 @@
 
     <EditText
         android:id="@id/password_edit_text"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/password"
         android:importantForAutofill="no"
@@ -50,7 +51,7 @@
 
     <EditText
         android:id="@+id/confirm_password_edit_text"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/confirm_password"
         android:imeOptions="actionDone"
@@ -65,7 +66,7 @@
 
     <Button
         android:id="@+id/sign_up_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/sign_up"
         app:layout_constraintBottom_toTopOf="@id/already_registered_text_view"
