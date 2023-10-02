@@ -8,8 +8,8 @@ class TopFilmRemoteMapper @Inject constructor() {
 
     fun map(
         topFilmRemote: TopFilmRemote,
-        isFavourite: Boolean,
-        isWatched: Boolean,
+        isFavourite: Boolean = false,
+        isWatched: Boolean = false,
     ): TopFilm {
         val countries = topFilmRemote.countries.map { countryRemote ->
             countryRemote.country

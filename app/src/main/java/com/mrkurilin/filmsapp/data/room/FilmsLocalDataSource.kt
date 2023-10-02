@@ -1,25 +1,30 @@
 package com.mrkurilin.filmsapp.data.room
 
+import com.mrkurilin.filmsapp.data.room.model.FilmStatusLocal
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class FilmsLocalDataSource @Inject constructor(
-    private val watchedFilmsDao: WatchedFilmsDao,
-    private val favouriteFilmsDao: FavouriteFilmsDao,
+    private val filmLocalDao: FilmLocalDao,
 ) {
 
-    fun isFilmFavourite(filmId: Int): Boolean {
-        return favouriteFilmsDao.isFilmFavourite(filmId)
+    fun getFilmsStatusLocalListFlow(): Flow<List<FilmStatusLocal>> {
+        return filmLocalDao.getFilmsStatusLocalListFlow()
     }
 
-    fun isFilmWatched(filmId: Int): Boolean {
-        return watchedFilmsDao.isFilmWatched(filmId)
+    fun getFilmStatusLocal(filmId: Int): FilmStatusLocal? {
+        return filmLocalDao.getFilmStatusLocal(filmId)
     }
 
-    fun entryWatchedFilm(filmId: Int) {
-        watchedFilmsDao.entryWatchedFilm(filmId)
+    fun insertFilmStatusLocal(filmStatusLocal: FilmStatusLocal) {
+        filmLocalDao.insertFilmStatusLocal(filmStatusLocal)
     }
 
-    fun entryFavouriteFilm(filmId: Int) {
-        favouriteFilmsDao.entryFavouriteFilm(filmId)
+    fun updateFilmStatusLocal(filmStatusLocal: FilmStatusLocal) {
+        filmLocalDao.updateFilmStatusLocal(filmStatusLocal)
+    }
+
+    fun getFilmStatusLocalFlow(filmId: Int): Flow<FilmStatusLocal?> {
+        return filmLocalDao.getFilmStatusLocalFlow(filmId)
     }
 }
