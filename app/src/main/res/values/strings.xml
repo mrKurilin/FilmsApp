@@ -7,5 +7,38 @@
     <string name="sign_up">Зарегистрироваться</string>
     <string name="no_network">Нет интернет соединения</string>
     <string name="retry">Попробовать снова</string>
-    <string name="not_registered_yet">Ещё не зарегистрированы?</string>
+    <string name="not_registered_yet_question">Ещё не зарегистрированы?</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
+    <string name="bad_formatted_email">Неверный формат электронной почты</string>
+    <string name="wrong_email_or_password">Неверное имя пользователя или пароль</string>
+    <string name="authentication_error">Ошибка авторизации</string>
+    <string name="field_should_not_be_empty">Поле не должно быть пустым</string>
+    <string name="invalid_email">Неверный формат электронной почты</string>
+    <string name="invalid_password">Неверный формат пароля</string>
+    <string name="confirm_password">Повторите пароль</string>
+    <string name="already_registered_question">Уже зарегистрированы?</string>
+    <string name="mismatch_password">Пароли не совпадают</string>
+    <string name="entry_favourite_button">Добавить или убрать из избранного</string>
+    <string name="entry_watched_button">Добавить или убрать из просмотренного</string>
+    <string name="poster">Постер</string>
+    <string name="loading_error">Ошибка загрузки</string>
+    <string name="try_again">Попробовать снова</string>
+    <string name="error_image">error image</string>
+
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Pellentesque metus leo, porta sed ante id, fringilla mattis velit. Nulla eleifend sem et
+        mattis egestas. Suspendisse volutpat pulvinar nibh. Praesent eros mauris, facilisis sed
+        varius eu, mattis vel neque. Curabitur convallis facilisis nisi, at convallis magna.
+        Nullam nisl lectus, maximus sed vestibulum ac, fermentum eget turpis. Vestibulum
+        sollicitudin quis libero id semper. Aenean semper euismod quam quis luctus. Ut quis
+        turpis ut mi condimentum commodo. Proin justo ex, porttitor quis est sed, vulputate laoreet
+        lorem.</string>
+
+    <string name="genres"><b>Жанры:</b> %1$s</string>
+    <string name="countries"><b>Страны:</b> %1$s</string>
+    <string name="year"><b>Год:</b> %1$d</string>
+
+    <string name="unsuccessfully_to_load_top_films">Не удалось загрузить фильмы</string>
+    <string name="film_details_loading_error">Ошибка при загрузке информации о фильме</string>
+
 </resources>
