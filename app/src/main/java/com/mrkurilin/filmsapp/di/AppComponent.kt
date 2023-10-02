@@ -7,7 +7,9 @@ import com.mrkurilin.filmsapp.presentation.signupfragment.SignUpViewModel
 import com.mrkurilin.filmsapp.presentation.top_films.topfilmsfragment.TopFilmsViewModel
 import dagger.BindsInstance
 import dagger.Component
+import javax.inject.Singleton
 
+@Singleton
 @Component(
     modules = [
         DataModule::class,

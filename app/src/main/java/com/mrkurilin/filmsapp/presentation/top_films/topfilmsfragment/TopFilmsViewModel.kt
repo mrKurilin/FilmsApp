@@ -2,11 +2,10 @@ package com.mrkurilin.filmsapp.presentation.top_films.topfilmsfragment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
 import androidx.paging.map
-import com.mrkurilin.filmsapp.domain.usecase.EntryFavouriteFilmUseCase
-import com.mrkurilin.filmsapp.domain.usecase.EntryWatchedFilmUseCase
 import com.mrkurilin.filmsapp.domain.usecase.GetFilmsPagingDataFlowUseCase
+import com.mrkurilin.filmsapp.domain.usecase.ToggleFavouriteFilmUseCase
+import com.mrkurilin.filmsapp.domain.usecase.ToggleWatchedFilmUseCase
 import com.mrkurilin.filmsapp.presentation.top_films.model.TopFilmUiMapper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,26 +14,30 @@ import javax.inject.Inject
 
 class TopFilmsViewModel @Inject constructor(
     private val topFilmUiMapper: TopFilmUiMapper,
-    private val entryFavouriteFilmUseCase: EntryFavouriteFilmUseCase,
-    private val entryWatchedFilmUseCase: EntryWatchedFilmUseCase,
+    private val toggleFavouriteFilmUseCase: ToggleFavouriteFilmUseCase,
+    private val toggleWatchedFilmUseCase: ToggleWatchedFilmUseCase,
     getFilmsPagingDataFlowUseCase: GetFilmsPagingDataFlowUseCase,
 ) : ViewModel() {
 
     private val _uiStateFlow = MutableStateFlow<TopFilmsUIState>(TopFilmsUIState.Loading)
     val uiStateFlow = _uiStateFlow.asStateFlow()
 
-    val pagingFilmsFlow = getFilmsPagingDataFlowUseCase.get().map { pagingData ->
+    val pagingFilmsFlow = getFilmsPagingDataFlowUseCase.get(viewModelScope).map { pagingData ->
         pagingData.map { topFilm ->
-            topFilmUiMapper.map(topFilm)
+            topFilmUiMapper.toTopFilmUIModel(topFilm)
         }
-    }.cachedIn(viewModelScope)
-
-    fun entryFavouriteFilm(filmId: Int) {
-        entryFavouriteFilmUseCase.entry(filmId)
     }
 
-    fun entryWatchedFilm(filmId: Int) {
-        entryWatchedFilmUseCase.entry(filmId)
+    fun toggleFavouriteFilm(filmId: Int?) {
+        if (filmId != null) {
+            toggleFavouriteFilmUseCase.toggle(filmId)
+        }
+    }
+
+    fun toggleWatchedFilm(filmId: Int?) {
+        if (filmId != null) {
+            toggleWatchedFilmUseCase.toggle(filmId)
+        }
     }
 
     fun onFilmsLoadingError(throwable: Throwable) {

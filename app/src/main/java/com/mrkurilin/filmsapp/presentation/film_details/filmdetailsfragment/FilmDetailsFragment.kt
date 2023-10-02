@@ -4,10 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.mrkurilin.filmsapp.R
@@ -40,14 +41,16 @@ class FilmDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         lifecycleScope.launch {
-            launch {
-                filmDetailsViewModel.uiStateFlow.collect { uiState ->
-                    updateUI(uiState)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    filmDetailsViewModel.uiStateFlow.collect { uiState ->
+                        updateUI(uiState)
+                    }
                 }
-            }
 
-            launch {
-                tryToLoadFilm()
+                launch {
+                    tryToLoadFilm()
+                }
             }
         }
 
@@ -57,14 +60,6 @@ class FilmDetailsFragment : Fragment() {
                 delay(500)
                 tryToLoadFilm()
             }
-        }
-
-        fragmentFilmDetailsBinding.favouriteImageButton.setOnClickListener {
-            filmDetailsViewModel.entryFavouriteFilm()
-        }
-
-        fragmentFilmDetailsBinding.watchedImageButton.setOnClickListener {
-            filmDetailsViewModel.entryWatchedFilm()
         }
     }
 
@@ -113,32 +108,16 @@ class FilmDetailsFragment : Fragment() {
         )
         fragmentFilmDetailsBinding.descriptionTextView.text = filmDetailsUiModel.description
         fragmentFilmDetailsBinding.nameTextView.text = filmDetailsUiModel.name
+        fragmentFilmDetailsBinding.watchedCheckBox.isChecked = filmDetailsUiModel.isWatched
+        fragmentFilmDetailsBinding.favouriteCheckBox.isChecked = filmDetailsUiModel.isFavourite
 
-        val favouriteImageButtonDrawableRes = if (filmDetailsUiModel.isFavourite) {
-            R.drawable.filled_star
-        } else {
-            R.drawable.empty_star
+        fragmentFilmDetailsBinding.favouriteCheckBox.setOnClickListener {
+            filmDetailsViewModel.toggleFavouriteFilm(filmDetailsUiModel.filmId)
         }
 
-        val watchedImageButtonDrawableRes = if (filmDetailsUiModel.isWatched) {
-            R.drawable.seen
-        } else {
-            R.drawable.not_seen
+        fragmentFilmDetailsBinding.watchedCheckBox.setOnClickListener {
+            filmDetailsViewModel.toggleWatchedFilm(filmDetailsUiModel.filmId)
         }
-
-        fragmentFilmDetailsBinding.favouriteImageButton.setImageDrawable(
-            AppCompatResources.getDrawable(
-                requireContext(),
-                favouriteImageButtonDrawableRes
-            )
-        )
-
-        fragmentFilmDetailsBinding.watchedImageButton.setImageDrawable(
-            AppCompatResources.getDrawable(
-                requireContext(),
-                watchedImageButtonDrawableRes
-            )
-        )
     }
 
     override fun onDestroyView() {

@@ -13,6 +13,7 @@ import com.mrkurilin.filmsapp.databinding.FragmentTopFilmsBinding
 import com.mrkurilin.filmsapp.di.appComponent
 import com.mrkurilin.filmsapp.di.lazyViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class TopFilmsFragment : Fragment() {
@@ -37,14 +38,15 @@ class TopFilmsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val pagingFilmsAdapter = PagingFilmsAdapter(
-            entryFavouriteFilm = { filmId ->
-                topFilmsViewModel.entryFavouriteFilm(filmId)
+            toggleFavouriteFilm = { filmId ->
+                topFilmsViewModel.toggleFavouriteFilm(filmId)
             },
-            entryWatchedFilm = { filmId ->
-                topFilmsViewModel.entryWatchedFilm(filmId)
+            toggleWatchedFilm = { filmId ->
+                topFilmsViewModel.toggleWatchedFilm(filmId)
             },
             onFilmClicked = { filmId ->
-                val action = TopFilmsFragmentDirections.actionTopFilmsFragmentToFilmDetailsFragment(filmId)
+                val action =
+                    TopFilmsFragmentDirections.actionTopFilmsFragmentToFilmDetailsFragment(filmId)
                 findNavController().navigate(action)
             }
         )
@@ -71,8 +73,8 @@ class TopFilmsFragment : Fragment() {
         }
 
         lifecycleScope.launch {
-            topFilmsViewModel.pagingFilmsFlow.collect { filmsPagingData ->
-                pagingFilmsAdapter.submitData(lifecycle, filmsPagingData)
+            topFilmsViewModel.pagingFilmsFlow.collectLatest { filmsPagingData ->
+                pagingFilmsAdapter.submitData(filmsPagingData)
             }
         }
 
@@ -89,9 +91,11 @@ class TopFilmsFragment : Fragment() {
                     is LoadState.Error -> {
                         topFilmsViewModel.onFilmsLoadingError(loadState.error)
                     }
+
                     is LoadState.NotLoading -> {
                         topFilmsViewModel.onFilmsNotLoading()
                     }
+
                     LoadState.Loading -> {
                         topFilmsViewModel.onFilmsLoading()
                     }
@@ -107,31 +111,17 @@ class TopFilmsFragment : Fragment() {
                 binding.filmsRecyclerView.isVisible = false
                 binding.loadingErrorGroup.isVisible = true
             }
+
             is TopFilmsUIState.FilmsLoaded -> {
                 binding.progressBar.isVisible = false
                 binding.filmsRecyclerView.isVisible = true
                 binding.loadingErrorGroup.isVisible = false
             }
+
             is TopFilmsUIState.Loading -> {
                 binding.progressBar.isVisible = true
                 binding.filmsRecyclerView.isVisible = false
                 binding.loadingErrorGroup.isVisible = false
-            }
-
-            TopFilmsUIState.FilmAddedToFavourite -> {
-
-            }
-            TopFilmsUIState.FilmAddedToWatched -> {
-
-            }
-            TopFilmsUIState.FilmEntryError -> {
-
-            }
-            TopFilmsUIState.FilmRemovedFromFavourite -> {
-
-            }
-            TopFilmsUIState.FilmRemovedFromWatched -> {
-
             }
         }
     }
