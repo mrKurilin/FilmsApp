@@ -1,4 +1,4 @@
-package com.mrkurilin.filmsapp.presentation.film_details.model
+package com.mrkurilin.filmsapp.presentation.filmDetails.model
 
 import com.mrkurilin.filmsapp.domain.model.FilmDetails
 import javax.inject.Inject

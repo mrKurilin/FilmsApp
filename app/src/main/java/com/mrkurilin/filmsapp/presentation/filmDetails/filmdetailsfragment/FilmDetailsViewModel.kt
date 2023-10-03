@@ -1,11 +1,11 @@
-package com.mrkurilin.filmsapp.presentation.film_details.filmdetailsfragment
+package com.mrkurilin.filmsapp.presentation.filmDetails.filmdetailsfragment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mrkurilin.filmsapp.domain.usecase.GetFilmDetailsFlowByIdUseCase
 import com.mrkurilin.filmsapp.domain.usecase.ToggleFavouriteFilmUseCase
 import com.mrkurilin.filmsapp.domain.usecase.ToggleWatchedFilmUseCase
-import com.mrkurilin.filmsapp.presentation.film_details.model.FilmDetailsUiMapper
+import com.mrkurilin.filmsapp.presentation.filmDetails.model.FilmDetailsUiMapper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

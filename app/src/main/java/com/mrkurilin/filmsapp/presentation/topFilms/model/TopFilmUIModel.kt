@@ -1,4 +1,4 @@
-package com.mrkurilin.filmsapp.presentation.top_films.model
+package com.mrkurilin.filmsapp.presentation.topFilms.model
 
 data class TopFilmUIModel(
     val filmId: Int,

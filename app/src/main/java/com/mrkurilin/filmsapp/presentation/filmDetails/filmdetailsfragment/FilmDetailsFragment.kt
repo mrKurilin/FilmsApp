@@ -1,4 +1,4 @@
-package com.mrkurilin.filmsapp.presentation.film_details.filmdetailsfragment
+package com.mrkurilin.filmsapp.presentation.filmDetails.filmdetailsfragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,7 +15,7 @@ import com.mrkurilin.filmsapp.R
 import com.mrkurilin.filmsapp.databinding.FragmentFilmDetailsBinding
 import com.mrkurilin.filmsapp.di.appComponent
 import com.mrkurilin.filmsapp.di.lazyViewModel
-import com.mrkurilin.filmsapp.presentation.film_details.model.FilmDetailsUiModel
+import com.mrkurilin.filmsapp.presentation.filmDetails.model.FilmDetailsUiModel
 import com.mrkurilin.filmsapp.util.GlideRequestListener
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

@@ -1,6 +1,6 @@
-package com.mrkurilin.filmsapp.presentation.film_details.filmdetailsfragment
+package com.mrkurilin.filmsapp.presentation.filmDetails.filmdetailsfragment
 
-import com.mrkurilin.filmsapp.presentation.film_details.model.FilmDetailsUiModel
+import com.mrkurilin.filmsapp.presentation.filmDetails.model.FilmDetailsUiModel
 
 sealed class FilmDetailsUIState {
 

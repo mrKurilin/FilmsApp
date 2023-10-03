@@ -1,4 +1,4 @@
-package com.mrkurilin.filmsapp.presentation.top_films.topfilmsfragment
+package com.mrkurilin.filmsapp.presentation.topFilms.topfilmsfragment
 
 import android.view.ViewGroup
 import androidx.paging.LoadState

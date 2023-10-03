@@ -1,9 +1,9 @@
-package com.mrkurilin.filmsapp.presentation.top_films.topfilmsfragment
+package com.mrkurilin.filmsapp.presentation.topFilms.topfilmsfragment
 
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import com.mrkurilin.filmsapp.presentation.TopFilmUIModelDiffUtilItemCallback
-import com.mrkurilin.filmsapp.presentation.top_films.model.TopFilmUIModel
+import com.mrkurilin.filmsapp.presentation.topFilms.model.TopFilmUIModel
 
 class PagingFilmsAdapter(
     private val toggleFavouriteFilm: (Int?) -> Unit,

@@ -1,4 +1,4 @@
-package com.mrkurilin.filmsapp.presentation.top_films.topfilmsfragment
+package com.mrkurilin.filmsapp.presentation.topFilms.topfilmsfragment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,7 +6,7 @@ import androidx.paging.map
 import com.mrkurilin.filmsapp.domain.usecase.GetFilmsPagingDataFlowUseCase
 import com.mrkurilin.filmsapp.domain.usecase.ToggleFavouriteFilmUseCase
 import com.mrkurilin.filmsapp.domain.usecase.ToggleWatchedFilmUseCase
-import com.mrkurilin.filmsapp.presentation.top_films.model.TopFilmUiMapper
+import com.mrkurilin.filmsapp.presentation.topFilms.model.TopFilmUiMapper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map

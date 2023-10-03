@@ -1,7 +1,7 @@
 package com.mrkurilin.filmsapp.presentation
 
 import androidx.recyclerview.widget.DiffUtil
-import com.mrkurilin.filmsapp.presentation.top_films.model.TopFilmUIModel
+import com.mrkurilin.filmsapp.presentation.topFilms.model.TopFilmUIModel
 
 class TopFilmUIModelDiffUtilItemCallback : DiffUtil.ItemCallback<TopFilmUIModel>() {
 
