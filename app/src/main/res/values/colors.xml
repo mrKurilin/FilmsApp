@@ -8,13 +8,13 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="crime">#FF5733</color>
-    <color name="thriller">#660066</color>
-    <color name="comedy">#FFD700</color>
-    <color name="horror">#990000</color>
-    <color name="drama">#333399</color>
-    <color name="adventure">#009900</color>
-    <color name="action">#FF0000</color>
-    <color name="science_fiction">#00CCFF</color>
-    <color name="romance">#FF99CC</color>
+    <color name="crime">#1AFF5733</color>
+    <color name="thriller">#1A660066</color>
+    <color name="comedy">#1AFFD700</color>
+    <color name="horror">#1A990000</color>
+    <color name="drama">#1A333399</color>
+    <color name="adventure">#1A009900</color>
+    <color name="action">#1AFF0000</color>
+    <color name="science_fiction">#1A00CCFF</color>
+    <color name="romance">#1AFF99CC</color>
 </resources>

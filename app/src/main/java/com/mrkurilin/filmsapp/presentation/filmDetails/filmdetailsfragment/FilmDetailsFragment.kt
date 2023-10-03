@@ -20,6 +20,8 @@ import com.mrkurilin.filmsapp.util.GlideRequestListener
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+private const val TRY_AGAIN_DELAY = 500L
+
 class FilmDetailsFragment : Fragment() {
 
     private val args: FilmDetailsFragmentArgs by navArgs()
@@ -57,7 +59,7 @@ class FilmDetailsFragment : Fragment() {
         fragmentFilmDetailsBinding.tryAgainButton.setOnClickListener {
             lifecycleScope.launch {
                 filmDetailsViewModel.onLoading()
-                delay(500)
+                delay(TRY_AGAIN_DELAY)
                 tryToLoadFilm()
             }
         }
@@ -87,12 +89,16 @@ class FilmDetailsFragment : Fragment() {
     }
 
     private fun bind(filmDetailsUiModel: FilmDetailsUiModel) {
+        fragmentFilmDetailsBinding.posterLoadingProgressBar.visibility = View.VISIBLE
         Glide.with(fragmentFilmDetailsBinding.posterImageView)
             .load(filmDetailsUiModel.posterUrl)
             .addListener(
                 GlideRequestListener(
-                    progressBar = fragmentFilmDetailsBinding.posterLoadingProgressBar,
                     imageView = fragmentFilmDetailsBinding.posterImageView,
+                    manageVisibility = {
+                        fragmentFilmDetailsBinding.posterLoadingProgressBar.visibility = View.INVISIBLE
+                        fragmentFilmDetailsBinding.posterImageView.visibility = View.VISIBLE
+                    }
                 )
             )
             .into(fragmentFilmDetailsBinding.posterImageView)

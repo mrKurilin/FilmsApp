@@ -1,9 +1,7 @@
 package com.mrkurilin.filmsapp.util
 
 import android.graphics.drawable.Drawable
-import android.view.View
 import android.widget.ImageView
-import android.widget.ProgressBar
 import androidx.appcompat.content.res.AppCompatResources
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -12,8 +10,8 @@ import com.bumptech.glide.request.target.Target
 import com.mrkurilin.filmsapp.R
 
 class GlideRequestListener(
-    private val progressBar: ProgressBar,
     private val imageView: ImageView,
+    private val manageVisibility: () -> Unit = {},
 ) : RequestListener<Drawable> {
 
     override fun onLoadFailed(
@@ -28,8 +26,7 @@ class GlideRequestListener(
                 R.drawable.ic_baseline_file_download_off_24
             )
         )
-        progressBar.visibility = View.INVISIBLE
-        imageView.visibility = View.VISIBLE
+        manageVisibility()
         return true
     }
 
@@ -41,8 +38,7 @@ class GlideRequestListener(
         isFirstResource: Boolean
     ): Boolean {
         imageView.setImageDrawable(resource)
-        progressBar.visibility = View.INVISIBLE
-        imageView.visibility = View.VISIBLE
+        manageVisibility()
         return true
     }
 }

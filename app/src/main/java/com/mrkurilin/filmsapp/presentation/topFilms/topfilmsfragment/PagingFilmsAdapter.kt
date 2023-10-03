@@ -30,14 +30,6 @@ class PagingFilmsAdapter(
             onFilmClicked(film.filmId)
         }
 
-        holder.bind(
-            name = film.name,
-            genre = film.genres,
-            year = film.year,
-            country = film.countries,
-            posterUrl = film.posterUrl,
-            isFavourite = film.isFavourite,
-            isWatched = film.isWatched,
-        )
+        holder.bind(film)
     }
 }
