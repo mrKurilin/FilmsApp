@@ -9,3 +9,4 @@
 .cxx
 local.properties
 /app/google-services.json
+/app/src/main/java/com/mrkurilin/filmsapp/data/remote/ApiConstants.kt
